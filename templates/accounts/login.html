@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+    Log in
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>Log in</h1>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        {% render_field form.username  placeholder="Login" class="login_label"  id="" %}
+        {% render_field form.password  placeholder="Password" class="login_password"  id="" %}
+        <p>
+            Nie posiadasz konta? Załóż je <a href="/register/">tutaj</a>
+        </p>
+        <button type="submit" class="btn btn-primary" style="position: relative; left: 47.3%;">Zaloguj</button>
+    </form>
+{% endblock %}
