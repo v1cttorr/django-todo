@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    Room <br> <br>
+    {% for task in room.get_tasks %}
+        {{task.title}} <br>
+        {{task.description}} <br>
+        {{task.completed}} <br>
+        {{task.date}} <br>
+        {{task.importance}} <br>
+    {% endfor %}
+{% endblock %}
