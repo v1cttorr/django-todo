@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Profile</h1>
+        <table class="table">
+            <tr>
+                <td>Username:</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img src="/static/img/profile_pic.png" alt="Default Profile Picture">
+                {% endif %}
+            </tr>
+            <tr id="controls">
+                <td colspan="2"><a href="/profile/edit/">Edit</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+{% endblock %}
