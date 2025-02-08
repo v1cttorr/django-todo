@@ -3,6 +3,8 @@ from .models import TaskRoom, Task
 from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+
 
 # Create your views here.
 def home(request):
@@ -33,3 +35,27 @@ def room(request, pk):
     }
 
     return render(request, 'room.html', context)
+
+def addTask(request, pk):
+    room = TaskRoom.objects.get(id=pk)
+    title = request.POST.get('title')
+    description = request.POST.get('description')
+    date = request.POST.get('date')
+    importance = request.POST.get('importance')
+
+    task = Task.objects.create(
+        title=title,
+        description=description,
+        room=room,
+        date=date,
+        importance=importance
+    )
+
+    return JsonResponse({'success': 'Task added successfully!'})
+
+def getTasks(request, pk):
+    room = TaskRoom.objects.get(id=pk)
+    tasks = room.get_tasks
+    tasks = list(tasks.values())
+    
+    return JsonResponse({'tasks': tasks})
