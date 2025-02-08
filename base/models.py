@@ -1,14 +1,21 @@
 from django.db import models
 from accounts.models import Profile
+import uuid
 
 # Create your models here.
 class TaskRoom(models.Model):
     title = models.CharField(max_length=100)
     users = models.ManyToManyField(Profile, related_name='rooms')
+    invite_code = models.CharField(max_length=10, unique=True, blank=True)
 
     def __str__(self):
         return self.title
-    
+
+    def save(self, *args, **kwargs):
+        if not self.invite_code:
+            self.invite_code = str(uuid.uuid4())[:8]  # Generujemy unikalny kod (np. "abc12345")
+        super().save(*args, **kwargs)
+
     @property
     def get_tasks(self):
         return self.tasks.all()

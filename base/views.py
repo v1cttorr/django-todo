@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import TaskRoom, Task
 from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
@@ -59,13 +59,14 @@ def getTasks(request, pk):
     # tasks = list(tasks.values())
     tasks_data = []
     for task in tasks:
+        formatted_date = task.date.strftime('%d %B %Y, %H:%M')
         tasks_data.append({
             'id': task.id,
             'title': task.title,
             'description': task.description,
             'completed': task.completed,
-            'date': task.date,
-            'importance': task.get_importance_display(),
+            'date': formatted_date,
+            'importance': task.importance#.get_importance_display(),
         })
 
     return JsonResponse({'tasks': tasks_data})
@@ -77,3 +78,13 @@ def completeTask(request, pk, task_pk):
     task.save()
 
     return JsonResponse({'success': 'Task completed successfully!'})
+
+@login_required(login_url='login')
+def joinRoom(request, invite_code):
+    room = get_object_or_404(TaskRoom, invite_code=invite_code)
+    user = Profile.objects.get(user=request.user)
+
+    if user not in room.users.all():
+        room.users.add(user)
+
+    return redirect('room', pk=room.id)

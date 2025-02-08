@@ -2,7 +2,8 @@
 
 {% block content %}
     Room <br> <br>
-
+    Invite code: {{room.invite_code}} <br> <br>
+    
     <form method="POST" id="addTask">
         {% csrf_token %}
         <input type="text" name="title" placeholder="Title"> <br>
