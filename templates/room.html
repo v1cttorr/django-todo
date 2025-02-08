@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/room.css' %}">
+{% endblock %}
 
 {% block content %}
     Room <br> <br>
     Invite code: {{room.invite_code}} <br> <br>
-    
+
     <form method="POST" id="addTask">
         {% csrf_token %}
         <input type="text" name="title" placeholder="Title"> <br>
@@ -55,6 +60,8 @@
                 success: function(data) {
                     $('#tasks').html('');
                     data.tasks.forEach(function (data) {
+                        //********************************
+                        //HERE ARE ELEMENTS WITH THE TASKS
                         $('#tasks').append(
                             `<div id="taskID${data.id}" onchange=saveEdit(${data.id})>` +
                                 '<h2 class="title">' + data.title + '</h2>' +
