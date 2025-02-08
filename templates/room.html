@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    Room <br> <br>
+
+    <form method="POST" id="addTask">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Title"> <br>
+        <input type="text" name="description" placeholder="Description"> <br>
+        <input type="datetime-local" name="date"> <br>
+        <select name="importance" id="importance">
+            <option value="trivial">Trivial</option>
+            <option value="important">Important</option>
+            <option value="high_priority">High Priority</option>
+            <option value="very_important">Very Important</option>
+        </select>
+        <input type="submit" value="Add Task">
+    </form>
+
+    <script>
+        //*************** SEND TASKS ***************
+        $('#addTask').on('submit', function(e) {
+            e.preventDefault();
+
+            var title = $('input[name="title"]').val();
+            var description = $('input[name="description"]').val();
+            var date = $('input[name="date"]').val();
+            var importance = $('#importance').val();
+            console.log(title, description, date, importance);
+
+            $.ajax({
+                url: 'add-task/',
+                type: 'POST',
+                data: {
+                    title: title,
+                    description: description,
+                    date: date,
+                    importance: importance
+                },
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                },
+                success: function(response) {
+                    getTasks()
+                }
+            });
+        });
+
+        //*************** GET TASKS ***************
+        function getTasks(){
+            $.ajax({
+                url: 'get-tasks/',
+                type: 'GET',
+                success: function(data) {
+                    $('#tasks').html('');
+                    data.tasks.forEach(function (data) {
+                        $('#tasks').append(
+                            `<div id="taskID${data.id}" onchange=saveEdit(${data.id})>` +
+                                '<h2 class="title">' + data.title + '</h2>' +
+                                '<h4 class="desc">' + data.description + '</h4>' +
+                                '<h4 class="date">' + data.date + '</h4>' +
+                                '<h4 class="importance">' + data.importance + '</h4>' +
+                                '<input class="checkbox" type="checkbox" id="check' + data.id + '" >' +
+                                '<hr>' +
+                            '</div>'
+                        );
+                        document.getElementById('check' + data.id).checked = data.completed;
+                    })
+                }
+            });
+        } //TODO SAVE CHECKBOX STATE
+        getTasks()
+
+        function saveEdit(id){
+            console.log(id)
+            task = $('#taskID' + id)
+            // console.log(task.find('.title').text())
+            // console.log(task.find('.desc').text())
+            // console.log(task.find('.date').text())
+            // console.log(task.find('.importance').text())
+            console.log(task.find('.checkbox').prop('checked'))
+            $.ajax({
+                url: 'complete-task/' + id + '/',
+                type: 'POST',
+                data: {
+                    completed: task.find('.checkbox').prop('checked')
+                },
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                },
+                success: function(response) {
+                    getTasks()
+                },
+                error: function(xhr, status, error) {
+                    console.error('Blad AJAX:', status, error);
+                }
+            });
+        }
+    </script>
+
+    <br> <br>
+    <div id="tasks"></div>
+
+{% endblock %}
