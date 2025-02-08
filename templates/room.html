@@ -54,29 +54,51 @@
                 success: function(data) {
                     $('#tasks').html('');
                     data.tasks.forEach(function (data) {
-                        $('#tasks').append('<h2>' + data.title + '</h2>');
-                        $('#tasks').append('<h4>' + data.description + '</h4>');
-                        $('#tasks').append('<h4>' + data.date + '</h4>');
-                        $('#tasks').append('<h4>' + data.importance + '</h4>');
-                        $('#tasks').append('<input type="checkbox" id="check' + data.id + '" >' + data.completed);
+                        $('#tasks').append(
+                            `<div id="taskID${data.id}" onchange=saveEdit(${data.id})>` +
+                                '<h2 class="title">' + data.title + '</h2>' +
+                                '<h4 class="desc">' + data.description + '</h4>' +
+                                '<h4 class="date">' + data.date + '</h4>' +
+                                '<h4 class="importance">' + data.importance + '</h4>' +
+                                '<input class="checkbox" type="checkbox" id="check' + data.id + '" >' +
+                                '<hr>' +
+                            '</div>'
+                        );
                         document.getElementById('check' + data.id).checked = data.completed;
-                        $('#tasks').append('<hr>');
                     })
                 }
             });
         } //TODO SAVE CHECKBOX STATE
         getTasks()
+
+        function saveEdit(id){
+            console.log(id)
+            task = $('#taskID' + id)
+            // console.log(task.find('.title').text())
+            // console.log(task.find('.desc').text())
+            // console.log(task.find('.date').text())
+            // console.log(task.find('.importance').text())
+            console.log(task.find('.checkbox').prop('checked'))
+            $.ajax({
+                url: 'complete-task/' + id + '/',
+                type: 'POST',
+                data: {
+                    completed: task.find('.checkbox').prop('checked')
+                },
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                },
+                success: function(response) {
+                    getTasks()
+                },
+                error: function(xhr, status, error) {
+                    console.error('Blad AJAX:', status, error);
+                }
+            });
+        }
     </script>
 
     <br> <br>
     <div id="tasks"></div>
-
-    <!-- {% for task in room.get_tasks %}
-        {{task.title}} <br>
-        {{task.description}} <br>
-        {{task.completed}} <br>
-        {{task.date}} <br>
-        {{task.importance}} <br> <br> <br>
-    {% endfor %} -->
 
 {% endblock %}

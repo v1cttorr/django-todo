@@ -56,6 +56,24 @@ def addTask(request, pk):
 def getTasks(request, pk):
     room = TaskRoom.objects.get(id=pk)
     tasks = room.get_tasks
-    tasks = list(tasks.values())
-    
-    return JsonResponse({'tasks': tasks})
+    # tasks = list(tasks.values())
+    tasks_data = []
+    for task in tasks:
+        tasks_data.append({
+            'id': task.id,
+            'title': task.title,
+            'description': task.description,
+            'completed': task.completed,
+            'date': task.date,
+            'importance': task.get_importance_display(),
+        })
+
+    return JsonResponse({'tasks': tasks_data})
+
+def completeTask(request, pk, task_pk):
+    task = Task.objects.get(id=task_pk)
+    completed = True if request.POST.get('completed') == 'true' else False
+    task.completed = completed
+    task.save()
+
+    return JsonResponse({'success': 'Task completed successfully!'})
