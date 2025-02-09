@@ -1,14 +1,21 @@
 from django.db import models
 from accounts.models import Profile
+import uuid
 
 # Create your models here.
 class TaskRoom(models.Model):
     title = models.CharField(max_length=100)
     users = models.ManyToManyField(Profile, related_name='rooms')
+    invite_code = models.CharField(max_length=10, unique=True, blank=True)
 
     def __str__(self):
         return self.title
-    
+
+    def save(self, *args, **kwargs):
+        if not self.invite_code:
+            self.invite_code = str(uuid.uuid4())[:8]  # Generujemy unikalny kod (np. "abc12345")
+        super().save(*args, **kwargs)
+
     @property
     def get_tasks(self):
         return self.tasks.all()
@@ -27,6 +34,14 @@ class Task(models.Model):
     room = models.ForeignKey(TaskRoom, on_delete=models.CASCADE, related_name='tasks')
     date = models.DateTimeField()
     importance = models.CharField(max_length=30, choices=importance_choices, default='trivial')
+
+    def __str__(self):
+        return self.title
+    
+class Subtask(models.Model):
+    title = models.CharField(max_length=100)
+    completed = models.BooleanField(default=False)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
 
     def __str__(self):
         return self.title

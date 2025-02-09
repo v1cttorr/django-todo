@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/room.css' %}">
+{% endblock %}
 
 {% block content %}
     Room <br> <br>
+    Invite code: {{room.invite_code}} <br> <br>
 
     <form method="POST" id="addTask">
         {% csrf_token %}
@@ -53,34 +59,55 @@
                 type: 'GET',
                 success: function(data) {
                     $('#tasks').html('');
-                    data.tasks.forEach(function (data) {
+                    data.tasks.forEach(function (task) {
+                        //*********************************
+                        // HERE ARE ELEMENTS WITH THE TASKS
+                        //*********************************
+
+                        //******** START TASK DIV ********
                         $('#tasks').append(
-                            `<div id="taskID${data.id}" onchange=saveEdit(${data.id})>` +
-                                '<h2 class="title">' + data.title + '</h2>' +
-                                '<h4 class="desc">' + data.description + '</h4>' +
-                                '<h4 class="date">' + data.date + '</h4>' +
-                                '<h4 class="importance">' + data.importance + '</h4>' +
-                                '<input class="checkbox" type="checkbox" id="check' + data.id + '" >' +
+                            `<div id="taskID${task.id}" onchange='completeTask(${task.id}, "task")'>` +
+                                '<h2 class="title">' + task.title + '</h2>' +
+                                '<h4 class="desc">' + task.description + '</h4>' +
+                                '<h4 class="date">' + task.date + '</h4>' +
+                                '<h4 class="importance">' + task.importance + '</h4>' +
+                                '<input class="checkbox" type="checkbox" id="check' + task.id + '" ><br><br>'
+                        )
+
+                        //******** START SUBTASKS DIV ********
+                        data.subtasks.forEach(function(subtask){
+                            if(subtask.task_id == task.id){
+                                $('#tasks').append(
+                                    `<div id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask")'>` +
+                                        subtask.title +
+                                        '<input type="checkbox" class="checkbox" id="subcheck' + subtask.id + '" >' +
+                                    '</div>'
+                                )
+                                document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
+                            }
+                        })
+                        //******** END SUBTASKS DIV **********
+
+
+                        //******* END TASK DIV *******
+                        $('#tasks').append(
                                 '<hr>' +
                             '</div>'
                         );
-                        document.getElementById('check' + data.id).checked = data.completed;
+                        document.getElementById('check' + task.id).checked = task.completed; //SET CHECKBOX STATE FROM DATABASE
                     })
                 }
             });
-        } //TODO SAVE CHECKBOX STATE
+        }
         getTasks()
 
-        function saveEdit(id){
-            console.log(id)
-            task = $('#taskID' + id)
-            // console.log(task.find('.title').text())
-            // console.log(task.find('.desc').text())
-            // console.log(task.find('.date').text())
-            // console.log(task.find('.importance').text())
-            console.log(task.find('.checkbox').prop('checked'))
+        //*************** SAVE COMPLETE TASK ***************
+        function completeTask(id, task_type){
+            task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
+            // console.log(task.find('.checkbox'))
+            // console.log(task.find('.checkbox').prop('checked'))
             $.ajax({
-                url: 'complete-task/' + id + '/',
+                url: 'complete-task/' + id + '/' + task_type + '/',
                 type: 'POST',
                 data: {
                     completed: task.find('.checkbox').prop('checked')
@@ -99,6 +126,8 @@
     </script>
 
     <br> <br>
+
+    <!-- ************** TASKS DIV **************** -->
     <div id="tasks"></div>
 
 {% endblock %}
