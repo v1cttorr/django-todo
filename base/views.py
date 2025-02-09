@@ -26,10 +26,27 @@ def home(request):
     return render(request, 'home.html', context)
 
 @login_required(login_url='login')
+def createRoom(request):
+    if request.method == 'POST':
+        user = Profile.objects.get(user=request.user)
+        title = request.POST.get('title')
+
+        room = TaskRoom.objects.create(
+            title=title,
+            admin=user
+        )
+
+        room.users.add(user)
+
+        return redirect('room', pk=room.id)
+    return render(request, 'createRoom.html')
+
+@login_required(login_url='login')
 def room(request, pk):
     user = Profile.objects.get(user=request.user)
     # room = user.rooms.get(id=pk)
     room = get_object_or_404(user.rooms, id=pk)
+
     context = {
         'room': room,
     }
@@ -57,7 +74,8 @@ def addTask(request, pk):
 def getTasks(request, pk):
     room = TaskRoom.objects.get(id=pk)
 
-    tasks = room.get_tasks
+
+    tasks = room.get_tasks.order_by('date')
     # tasks = list(tasks.values())
     tasks_data = []
     for task in tasks:

@@ -102,6 +102,7 @@
         getTasks()
 
         //*************** SAVE COMPLETE TASK ***************
+        //********* task_type: task or subtask *************
         function completeTask(id, task_type){
             task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
             // console.log(task.find('.checkbox'))

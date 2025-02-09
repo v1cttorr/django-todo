@@ -2,6 +2,7 @@
 
 {% block content %}
     Home <br>
+    <a href="/create-room/">Create room here!</a> <br> <br>
     {% for room in rooms %}
         <a href="/room/{{room.pk}}/">{{room}}</a>
     {% endfor %}
