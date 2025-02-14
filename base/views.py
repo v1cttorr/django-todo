@@ -46,9 +46,11 @@ def room(request, pk):
     user = Profile.objects.get(user=request.user)
     # room = user.rooms.get(id=pk)
     room = get_object_or_404(user.rooms, id=pk)
+    users = room.users.all()
 
     context = {
         'room': room,
+        'users': users,
     }
 
     return render(request, 'room.html', context)
@@ -108,6 +110,19 @@ def completeTask(request, pk, task_pk, task_type):
     task.save()
 
     return JsonResponse({'success': 'Task completed successfully!'})
+
+def removeUserFromRoom(request, pk, user_pk):
+    room = TaskRoom.objects.get(id=pk)
+    user = Profile.objects.get(user=request.user)
+
+    if room.admin != user:
+        return redirect('room', pk=pk)
+
+    userToRemove = Profile.objects.get(id=user_pk)
+
+    room.users.remove(userToRemove)
+
+    return redirect('room', pk=pk)
 
 @login_required(login_url='login')
 def joinRoom(request, invite_code):

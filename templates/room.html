@@ -9,6 +9,17 @@
     Room <br> <br>
     Invite code: {{room.invite_code}} <br> <br>
 
+    {% if room.admin.user == request.user and users|length > 1 %}
+        
+        Zarzadzaj użytkownikami: <br>
+        {% for user in users %}
+            {% if not request.user.username == user.user.username %}
+                <div>{{user.user.username}} <button><a href="remove/{{user.pk}}/">USUŃ</a></button></div><br>
+            {% endif %}
+        {% endfor %}
+    
+    {% endif %}
+
     <form method="POST" id="addTask">
         {% csrf_token %}
         <input type="text" name="title" placeholder="Title"> <br>
