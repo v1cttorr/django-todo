@@ -34,7 +34,16 @@
         <input type="submit" value="Add Task">
     </form>
 
+    <h3>Sort by:</h3>
+    <a href="?sort=date">Date</a>
+    <a href="?sort=importance">Importance</a>
+
     <script>
+        const sort = new URLSearchParams(window.location.search).get('sort')
+        if(sort == null || sort == ''){
+            window.location.search = '?sort=date'
+        }
+
         //*************** SEND TASKS ***************
         $('#addTask').on('submit', function(e) {
             e.preventDefault();
@@ -66,7 +75,7 @@
         //*************** GET TASKS ***************
         function getTasks(){
             $.ajax({
-                url: 'get-tasks/',
+                url: 'get-tasks/?sort=' + sort,
                 type: 'GET',
                 success: function(data) {
                     $('#tasks').html('');
