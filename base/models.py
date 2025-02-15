@@ -5,6 +5,7 @@ import uuid
 # Create your models here.
 class TaskRoom(models.Model):
     title = models.CharField(max_length=100)
+    admin = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='admin_rooms')
     users = models.ManyToManyField(Profile, related_name='rooms')
     invite_code = models.CharField(max_length=10, unique=True, blank=True)
 

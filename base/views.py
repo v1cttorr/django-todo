@@ -4,6 +4,7 @@ from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.db.models import Case, When, Value, IntegerField
 
 
 # Create your views here.
@@ -26,12 +27,32 @@ def home(request):
     return render(request, 'home.html', context)
 
 @login_required(login_url='login')
+def createRoom(request):
+    if request.method == 'POST':
+        user = Profile.objects.get(user=request.user)
+        title = request.POST.get('title')
+
+        room = TaskRoom.objects.create(
+            title=title,
+            admin=user
+        )
+
+        room.users.add(user)
+
+        return redirect('room', pk=room.id)
+    return render(request, 'createRoom.html')
+
+@login_required(login_url='login')
 def room(request, pk):
     user = Profile.objects.get(user=request.user)
     # room = user.rooms.get(id=pk)
+
     room = get_object_or_404(user.rooms, id=pk)
+    users = room.users.all()
+
     context = {
         'room': room,
+        'users': users,
     }
 
     return render(request, 'room.html', context)
@@ -57,8 +78,20 @@ def addTask(request, pk):
 def getTasks(request, pk):
     room = TaskRoom.objects.get(id=pk)
 
-    tasks = room.get_tasks
-    # tasks = list(tasks.values())
+    sort = request.GET.get('sort', 'date')
+    if sort == 'null':
+        sort = 'date'
+
+    custom_order = Case(
+        When(importance='trivial', then=Value(4)),
+        When(importance='important', then=Value(3)),
+        When(importance='high_priority', then=Value(2)),
+        When(importance='very_important', then=Value(1)),
+        output_field=IntegerField()
+    )
+
+    tasks = room.get_tasks.order_by(custom_order if sort == 'importance' else sort)
+
     tasks_data = []
     for task in tasks:
         formatted_date = task.date.strftime('%d %B %Y, %H:%M')
@@ -90,6 +123,19 @@ def completeTask(request, pk, task_pk, task_type):
     task.save()
 
     return JsonResponse({'success': 'Task completed successfully!'})
+
+def removeUserFromRoom(request, pk, user_pk):
+    room = TaskRoom.objects.get(id=pk)
+    user = Profile.objects.get(user=request.user)
+
+    if room.admin != user:
+        return redirect('room', pk=pk)
+
+    userToRemove = Profile.objects.get(id=user_pk)
+
+    room.users.remove(userToRemove)
+
+    return redirect('room', pk=pk)
 
 @login_required(login_url='login')
 def joinRoom(request, invite_code):

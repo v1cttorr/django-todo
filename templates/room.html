@@ -9,6 +9,17 @@
     Room <br> <br>
     Invite code: {{room.invite_code}} <br> <br>
 
+    {% if room.admin.user == request.user and users|length > 1 %}
+        
+        Zarzadzaj użytkownikami: <br>
+        {% for user in users %}
+            {% if not request.user.username == user.user.username %}
+                <div>{{user.user.username}} <button><a href="remove/{{user.pk}}/">USUŃ</a></button></div><br>
+            {% endif %}
+        {% endfor %}
+    
+    {% endif %}
+
     <form method="POST" id="addTask">
         {% csrf_token %}
         <input type="text" name="title" placeholder="Title"> <br>
@@ -23,7 +34,16 @@
         <input type="submit" value="Add Task">
     </form>
 
+    <h3>Sort by:</h3>
+    <a href="?sort=date">Date</a>
+    <a href="?sort=importance">Importance</a>
+
     <script>
+        const sort = new URLSearchParams(window.location.search).get('sort')
+        if(sort == null || sort == ''){
+            window.location.search = '?sort=date'
+        }
+
         //*************** SEND TASKS ***************
         $('#addTask').on('submit', function(e) {
             e.preventDefault();
@@ -55,7 +75,7 @@
         //*************** GET TASKS ***************
         function getTasks(){
             $.ajax({
-                url: 'get-tasks/',
+                url: 'get-tasks/?sort=' + sort,
                 type: 'GET',
                 success: function(data) {
                     $('#tasks').html('');
@@ -102,6 +122,7 @@
         getTasks()
 
         //*************** SAVE COMPLETE TASK ***************
+        //********* task_type: task or subtask *************
         function completeTask(id, task_type){
             task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
             // console.log(task.find('.checkbox'))
