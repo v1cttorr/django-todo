@@ -1,0 +1,166 @@
+body {
+    background-color: #070707;
+    display: flex;
+    justify-content: center;
+    font-family: "Poppins", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+*{
+    padding:0;
+    margin: 0;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    border: 1px solid #6255F3;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+}
+
+.content {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.time {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #272727;
+    border-radius: 50%;
+}
+
+.time-content {
+    color: white;
+    font-size: 15px;
+    font-weight: medium;
+}
+
+.task-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+    justify-content: center;
+}
+
+.titleAndDesc {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.task-title {
+    margin-bottom: 2px; 
+    font-size: 22px; 
+    color: white;
+    font-weight: 500;
+}
+
+.task-desc {
+    margin-bottom: 2px;
+    color: #A0A0A0;
+    font-size: 14px;
+    line-height: 110%;
+    max-width: 80%;
+}
+
+.taskImportance {
+    font-size: 12px;
+    color: white;
+}
+
+.task {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Efekt połysku - teraz działa tylko na `.task` */
+.task::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        120deg, 
+        rgba(255, 255, 255, 0.2) 0%, 
+        rgba(255, 255, 255, 0) 50%, 
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    mix-blend-mode: screen; /* Lepszy efekt bez wpływania na tło strony */
+    opacity: 0.2;
+    transform: skewX(-20deg);
+    animation: shine 3s infinite linear;
+}
+
+/* Animacja połysku */
+@keyframes shine {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Abstrakcyjny gradientowy efekt */
+.task::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: radial-gradient(circle at left, rgba(255, 255, 255, 0.1), transparent);
+    clip-path: polygon(0 0, 100% 20%, 80% 80%, 0 100%);
+}
+
+/* Animowany border */
+.task:hover {
+    border-color: #8378ff;
+}
+
+.task:hover::before {
+    animation: border-glow 1s infinite;
+}
+
+@keyframes border-glow {
+    0% {
+        border-color: #6255F3;
+    }
+    50% {
+        border-color: #8378ff;
+    }
+    100% {
+        border-color: #6255F3;
+    }
+}
+.atribute{
+    color:white;
+    font-weight: 500;
+    font-size: 12px;
+    background-color: rgba(255, 255, 255, 0.59);
+    padding: 5px 15px;
+    border-radius: 15px;
+}
+.atributes{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 10px;
+}
