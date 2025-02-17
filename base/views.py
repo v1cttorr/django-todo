@@ -74,6 +74,17 @@ def addTask(request, pk):
 
     return JsonResponse({'success': 'Task added successfully!'})
 
+def addSubtask(request, pk):
+    task = Task.objects.get(id=request.POST.get('task_id'))
+    title = request.POST.get('title')
+
+    subtask = Subtask.objects.create(
+        title=title,
+        task=task
+    )
+
+    return JsonResponse({'success': 'Subtask added successfully!'})
+
 @login_required(login_url='login')
 def getTasks(request, pk):
     room = TaskRoom.objects.get(id=pk)
