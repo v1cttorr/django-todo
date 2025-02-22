@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    Room <br> <br>
+    <!-- Room <br> <br>
     Invite code: {{room.invite_code}} <br> <br>
 
     {% if room.admin.user == request.user and users|length > 1 %}
@@ -146,9 +146,51 @@
         }
     </script>
 
-    <br> <br>
+    <br> <br> -->
 
     <!-- ************** TASKS DIV **************** -->
-    <div id="tasks"></div>
+    <!--<div id="tasks"></div>-->
 
+    <div name="main-container" class="flex flex-col m-5">
+        <div name="navigationBar" class="w-full bg-black h-14">
+            <!--There will be date selector, settings, profile pic, etc - Look at figma-->
+        </div>
+        <div name="mainContent" class="flex w-full mt-4 flex-row">
+            <div name="left-column" class="flex flex-col gap-3 w-88 bg-black h-16">
+                <div name="dateAndClock" class="flex flex-col w-full">
+                    <div name="dateAndClock-content" class="flex flex-col m-4 w-full">
+                        <div name="helloUser">
+
+                        </div>
+                        <div name="weekDayAndDate">
+
+                        </div>
+                        <div name="clock">
+
+                        </div>
+                        <div name="ProgressBarAndCurrentProgress">
+                            <div name="CurrentProgress">
+
+                            </div>
+                            <div name="ProgressBar">
+
+                            </div>
+                            <div name="CompletedTasks">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div name="schedule" class="flex flex-col">
+
+                </div>
+                <div name="notes" class="flex flex-col">
+
+                </div>
+                <div name="markedTasks" class="flex flex-col">
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
