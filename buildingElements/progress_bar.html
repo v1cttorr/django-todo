@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar</title>
+    <style>
+        #progress-container {
+            width: 300px;
+            background: lightgray;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #progress {
+            width: 0%;
+            height: 20px;
+            background: green;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div id="progress-container">
+    <div id="progress"></div>
+</div>
+<button onclick="increaseProgress()">Zwiększ</button>
+
+<script>
+    let progress = 0;
+    let task = 3;
+    function increaseProgress() {
+        if (progress < 100) {
+            progress += 100/task;
+            document.getElementById("progress").style.width = progress + "%";
+        }
+    }
+</script>
+
+</body>
+</html>
