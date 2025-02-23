@@ -20,9 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from accounts import views as accounts_views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base.urls')),
+    path("__reload__/", include("django_browser_reload.urls")),
 
         # user
     path('register/', accounts_views.register, name="register"),

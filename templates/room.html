@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    Room <br> <br>
+    <!-- Room <br> <br>
     Invite code: {{room.invite_code}} <br> <br>
 
     {% if room.admin.user == request.user and users|length > 1 %}
@@ -33,6 +33,9 @@
         </select>
         <input type="submit" value="Add Task">
     </form>
+
+
+
 
     <h3>Sort by:</h3>
     <a href="?sort=date">Date</a>
@@ -181,9 +184,107 @@
         }
     </script>
 
-    <br> <br>
+    <br> <br> -->
 
     <!-- ************** TASKS DIV **************** -->
-    <div id="tasks"></div>
+    <!--<div id="tasks"></div>-->
 
+    <div name="main-container" class="flex flex-col m-5">
+        <div name="navigationBar" class="w-full bg-black h-14"><!--There will be date selector, settings, profile pic, etc - Look at figma-->
+        </div>
+        <div name="mainContent" class="flex w-full mt-4 flex-row">
+            <div name="left-column" class="flex flex-col gap-2"> <!--Left column for clock, notes etc.-->
+                <div name="helloUserAndClock" class="flex flex-col w-full bg-[#F1F9FE] rounded-lg border-[2px] border-[#ced7dcbb] shadow-[3px_3px_0px_#CAD1D6]">
+                <!--Clock,Date,Hello User and Progress Bar-->
+                
+                    <div name="helloUserAndClock-content" class="flex flex-col w-[90%] ml-10 justify-center m-4 mt-6 mb-4 border-l border-l-black pt-0 pr-10">
+                        <div name="helloUserAndDate" class="flex flex-col justify-start ml-4">
+                            <p name="helloUser" class="font-Poppins text-[12px] text-[#818AA3] m-0">Hello, <span class="font-medium text-[16px]">Filip</span></p> <!--Pobierz użytkownika z bazy-->
+                            <p name="date" class="text-[#09151B] text-[24px] font-semibold mt-[-10px]">Today is Friday 19th</p> <!--Data-->
+                        </div>
+
+                        <div name="clock" class="flex flex-row gap-1 ml-4 mt-1">
+                            <div name="n1" class="flex items-center justify-center  bg-[#09151B] aspect-square w-12 rounded-lg border-[1px] border-white" style="box-shadow: 3px 3px 0px #09151B;">
+                                <p class="text-white font-semibold text-[32px]">1</p>
+                            </div>
+                        
+                            <div name="n2" class="flex items-center justify-center bg-[#09151B] aspect-square w-12 rounded-lg border-[1px] border-white" style="box-shadow: 3px 3px 0px #09151B;">
+                                <p class="text-white font-semibold text-[32px]">2</p>
+                            </div>
+                        
+                            <div class="flex items-center justify-center">
+                                <p class="font-bold text-[32px]">:</p>
+                            </div>
+                        
+                            <div name="n3" class="flex items-center justify-center  bg-[#09151B] aspect-square w-12 rounded-lg border-[1px] border-white" style="box-shadow: 3px 3px 0px #09151B;">
+                                <p class="text-white font-semibold text-[32px]">3</p>
+                            </div>
+                        
+                            <div name="n4" class="flex items-center justify-center  bg-[#09151B] aspect-square w-12 rounded-lg border-[1px] border-white" style="box-shadow: 3px 3px 0px #09151B;">
+                                <p class="text-white font-semibold text-[32px]">4</p>
+                            </div>
+                        </div>
+                        
+                        <div name="currentProgressAndProgressBar" class="ml-4 flex-col w-full mt-2"> <!--Progress bar and completed tasks-->
+                            <div name="currentProgress">
+                                <p class="font-normal text-sm mt-2 text-[#818AA3]">Current Progress- <span id="percentOfCompletedTasks"></span></p>
+                            </div>
+                            <div name="progressBar" style="height: 15px; border-radius: 5px; background-color: #CACACA; width: 200px; position: relative;">
+                                <div id="progress" class="bg-black" style="width: 0; height: 15px; border-radius: 5px;"></div>
+                            </div>
+                            <div name="completedTasks" class="mt-1.5">
+                                <p class="font-normal text-sm text-[#09151B]"><span id="tasksDone">0</span>/<span id="allTasks">0</span> tasks are done!</p>
+                            </div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    let completedTasks = 6; // Pobierz z bazy ilość ukończonych tasków
+                                    let numberOfAllTasks = 12; // Pobierz z bazy ilość wszystkich tasków
+                                    
+                                    function increaseProgress() {
+                                        let progressBar = document.getElementById("progress");
+                                        let percentOfCompletedTasks = document.getElementById("percentOfCompletedTasks");
+                                        let tasksDone = document.getElementById("tasksDone");
+                                        let allTasks = document.getElementById("allTasks");
+                                        if (tasksDone) {
+                                            tasksDone.innerHTML = completedTasks;
+                                        }
+                                        if(allTasks){
+                                            allTasks.innerHTML = numberOfAllTasks;
+                                        }
+                                        if (progressBar) {
+                                            let progressWidth = (200 * completedTasks / numberOfAllTasks) + "px";
+                                            progressBar.style.width = progressWidth;
+                                        }
+                                        if(percentOfCompletedTasks){
+                                            percentOfCompletedTasks.innerHTML = Math.round((completedTasks / numberOfAllTasks) * 100) + "%";
+                                        }
+                                    }
+                            
+                                    increaseProgress();
+                                });
+                            </script>
+                            
+                        </div>
+                    </div>
+
+                </div>
+                <div name="notes" class="flex flex-col w-full bg-[#F1F9FE] rounded-lg border-[2px] border-[#ced7dcbb] shadow-[3px_3px_0px_#CAD1D6]">
+                    <div name="notes-content" class="flex flex-col w-[90%] ml-6 justify-center mt-4">
+                        <div name="textAndLogoAndEdit" class="flex flex-row justify-between">
+                            <div name="logoAndText" class="flex flex-row gap-1 items-center">
+                                <img src="{% static 'img/box.png' %}">
+                                <p>Your notes</p>
+                            </div>
+                            <div name="edit" class="flex items-center mr-2">
+                                <a href="#"><img src="{% static 'img/edit.png' %}"> </a>
+                            </div>
+                        </div>
+                        <div name="text">
+                            <p style="max-width: 250px;color:#8A95A3" class="text-[13px] m-1 mt-2 mb-3">Is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the </p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
 {% endblock %}
