@@ -6,3 +6,4 @@ db.sqlite3
 .DS_Store
 media/profile_pictures/*
 !media/profile_pictures/.gitignore
+node_modules

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Subtask, TaskRoom, Task
+from .models import Subtask, TaskRoom, Task, Notes
 from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -39,6 +39,12 @@ def createRoom(request):
 
         room.users.add(user)
 
+        notes = Notes.objects.create(
+            room=room,
+            text='Here you can add notes for your room!'
+        )
+
+
         return redirect('room', pk=room.id)
     return render(request, 'createRoom.html')
 
@@ -49,10 +55,12 @@ def room(request, pk):
 
     room = get_object_or_404(user.rooms, id=pk)
     users = room.users.all()
+    notes = room.notes
 
     context = {
         'room': room,
         'users': users,
+        'notes': notes,
     }
 
     return render(request, 'room.html', context)
@@ -73,6 +81,17 @@ def addTask(request, pk):
     )
 
     return JsonResponse({'success': 'Task added successfully!'})
+
+def addSubtask(request, pk):
+    task = Task.objects.get(id=request.POST.get('task_id'))
+    title = request.POST.get('title')
+
+    subtask = Subtask.objects.create(
+        title=title,
+        task=task
+    )
+
+    return JsonResponse({'success': 'Subtask added successfully!'})
 
 @login_required(login_url='login')
 def getTasks(request, pk):
