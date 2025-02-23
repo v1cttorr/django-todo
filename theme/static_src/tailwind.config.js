@@ -42,7 +42,14 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily:{
+                Poppins: ['Poppins', 'sans-serif'],
+            },
+            boxShadow: {
+                custom: '4px 4px 0px #09151B',
+            },
+        },
     },
     plugins: [
         /**
