@@ -300,6 +300,51 @@
                         </div>
                     </div>
                 </div>
+                <div name="MarkedTasks" class="flex flex-col w-full bg-[#F1F9FE] rounded-lg border-[2px] border-[#ced7dcbb] shadow-[3px_3px_0px_#CAD1D6] drop-shadow-md">
+                    <div name="MarkedTasks-content">
+                        <div name="notes-content" class="flex flex-col w-[90%] ml-6 justify-center mt-4">
+                            <div name="textLogoAndSort" class="flex flex-row justify-between">
+                                <div name="textAndLogo" class="flex flex-row gap-1 items-center">
+                                    <img src="{% static 'img/calendar.png' %}">
+                                    <p>Marked Tasks</p>
+                                </div>
+                                <div name="sort" class="flex flex-row items-center mr-3 gap-2">
+                                    <a href="?sort=date"><img src="{% static 'img/clock.png' %}"></a>
+                                    <a href="?sort=importance"><img src="{% static 'img/star.png' %}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
+                            <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                                <div name="time" class="flex justify-center items-center">
+                                    <p class="p-2 ml-4">7.00am</p>
+                                </div>
+                                <div name="titleAndDescription" class="flex flex-col p-2">
+                                    <p name="title">Call your boss</p>
+                                    <p name="description" class="text-[10px] max-w-[150px]">Some boiled eggs with white cheese and  bread</p>
+                                </div>
+                                <div name="edit" class="m-3">
+                                    <a href="#"><img src="{% static 'img/edit.png' %}"></a>
+                                </div>
+                            </div>
+                            <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                                <div name="time" class="flex justify-center items-center">
+                                    <p class="p-2 ml-4">7.00am</p>
+                                </div>
+                                <div name="titleAndDescription" class="flex flex-col p-2">
+                                    <p name="title">Call your boss</p>
+                                    <p name="description" class="text-[10px] max-w-[150px]">Some boiled eggs with white cheese and  bread</p>
+                                </div>
+                                <div name="edit" class="m-3">
+                                    <a href="#"><img src="{% static 'img/edit.png' %}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div name="addTask" class="ml-6 mt-3 mb-4">
+                            <a href="#" class="rounded-xl border-2 border-[#09151B] p-1 pl-3 pr-3">Add Task</a>
+                        </div>
+                    </div>
+                </div>
             </div>  
         </div>
     </div>
