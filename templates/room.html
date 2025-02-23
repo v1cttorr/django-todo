@@ -199,7 +199,7 @@
                 
                     <div name="helloUserAndClock-content" class="flex flex-col w-[90%] ml-10 justify-center m-4 mt-6 mb-4 border-l border-l-black pt-0 pr-10">
                         <div name="helloUserAndDate" class="flex flex-col justify-start ml-4">
-                            <p name="helloUser" class="font-Poppins text-[12px] text-[#818AA3] m-0">Hello, <span class="font-medium text-[16px]">Filip</span></p> <!--Pobierz użytkownika z bazy-->
+                            <p name="helloUser" class="font-Poppins text-[12px] text-[#818AA3] m-0">Hello, <span class="font-medium text-[16px]">{{request.user.first_name}}</span></p> <!--Pobierz użytkownika z bazy-->
                             <p name="date" class="text-[#09151B] text-[24px] font-semibold mt-[-10px]">Today is Friday 19th</p> <!--Data-->
                         </div>
 
@@ -280,7 +280,7 @@
                             </div>
                         </div>
                         <div name="text">
-                            <p style="max-width: 250px;color:#8A95A3" class="text-[13px] m-1 mt-2 mb-3">Is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the </p>
+                            <p style="max-width: 250px;color:#8A95A3" class="text-[13px] m-1 mt-2 mb-3">{{notes.text}}</p>
                         </div>
                     </div>
                 </div>
