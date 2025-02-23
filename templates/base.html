@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+    {% load static tailwind_tags %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Base {% endblock %}</title>
+    {% tailwind_css %}
     {% block css %}
     {% endblock %}
-    <style>
-        body{
-            background-color: #585858;
-        }
-    </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
-<body>
+<body class="bg-[#E4EAEE]">
     {% block content %}
     {% endblock %}
 </body>
