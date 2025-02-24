@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     Register
@@ -13,4 +14,6 @@
         {{ form|crispy }}
         <button type="submit" class="btn btn-primary" style="position: relative; left: 47.3%;">Register</button>
     </form>
+
+    
 {% endblock %}
