@@ -35,8 +35,9 @@ class RegisterForm(UserCreationForm):
         user.last_name = self.cleaned_data['lastname']
         user.save()
         
-        profile = Profile(user=user)
-        profile.save()
+        #TODO idk if this is necessary
+        # profile = Profile(user=user)
+        # profile.save()
         return user
     
 class LoginForm(forms.Form):
