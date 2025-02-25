@@ -46,3 +46,9 @@ class Subtask(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class Notes(models.Model):
+    # room = models.ForeignKey(TaskRoom, on_delete=models.CASCADE, related_name='notes')
+    room = models.OneToOneField(TaskRoom, on_delete=models.CASCADE, related_name='notes')
+    text = models.TextField()

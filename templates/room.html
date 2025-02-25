@@ -47,6 +47,7 @@
             window.location.search = '?sort=date'
         }
 
+
         //*************** SEND TASKS ***************
         $('#addTask').on('submit', function(e) {
             e.preventDefault();
@@ -55,7 +56,6 @@
             var description = $('input[name="description"]').val();
             var date = $('input[name="date"]').val();
             var importance = $('#importance').val();
-            console.log(title, description, date, importance);
 
             $.ajax({
                 url: 'add-task/',
@@ -76,8 +76,28 @@
         });
 
 
+        //*************** ADD SUBTASK ***************
+        function addSubtask(task_id){
+            event.preventDefault();
+            var form = event.target;
+            var title = form.querySelector('input[name="title"]').value;
 
-        
+            $.ajax({
+                url: 'add-subtask/',
+                type: 'POST',
+                data: {
+                    title: title,
+                    task_id: task_id
+                },
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                },
+                success: function(response) {
+                    getTasks()
+                }
+            });
+        }
+
 
         //*************** GET TASKS ***************
         function getTasks(){
@@ -114,6 +134,17 @@
                             }
                         })
                         //******** END SUBTASKS DIV **********
+
+
+                        //******** START ADD SUBTASK FORM ********
+                        $('#tasks').append(
+                            '<form method="POST" id="addSubtask' + task.id + '" onsubmit="addSubtask(' + task.id + ')">' +
+                                '{% csrf_token %}' +
+                                '<br><input type="text" name="title" placeholder="Title">' +
+                                '<input type="submit" value="Add Subtask">' +
+                            '</form>'
+                        )
+                        //******** END ADD SUBTASK FORM ********
 
 
                         //******* END TASK DIV *******
@@ -168,8 +199,10 @@
                 
                     <div name="helloUserAndClock-content" class="flex flex-col w-[90%] ml-10 justify-center m-10 mt-6 mb-4 border-l border-l-black pt-0 pr-10">
                         <div name="helloUserAndDate" class="flex flex-col justify-start ml-4">
+
                             <p name="helloUser" class="font-Poppins text-[12px] text-[#818AA3] m-0 drop-shadow-md">Hello, <span class="font-medium text-[16px] drop-shadow-md">Filip</span></p> <!--Pobierz użytkownika z bazy-->
                             <p name="date" class="text-[#09151B] text-[24px] font-semibold mt-[-10px]" style="filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.4));">Today is Friday 19th</p> <!--Data-->
+
                         </div>
 
                         <div name="clock" class="flex flex-row gap-1 ml-4 mt-1">
