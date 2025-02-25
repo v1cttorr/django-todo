@@ -189,6 +189,8 @@
     <!-- ************** TASKS DIV **************** -->
     <!--<div id="tasks"></div>-->
 
+    <script src="{% static 'js/getTasks.js' %}"></script>
+
     <div name="main-container" class="flex flex-col m-5">
         <div name="navigationBar" class="w-full bg-black h-14"><!--There will be date selector, settings, profile pic, etc - Look at figma-->
         </div>
@@ -280,8 +282,8 @@
                                     <p>Today's scheadule</p>
                                 </div>
                                 <div name="sort" class="flex flex-row items-center mr-3 gap-2">
-                                    <a href="?sort=date"><img src="{% static 'img/clock.png' %}"></a>
-                                    <a href="?sort=importance"><img src="{% static 'img/star.png' %}"></a>
+                                    <button onclick="getTasksForSchedule('date')"><img src="{% static 'img/clock.png' %}"></button>
+                                    <button onclick="getTasksForSchedule('importance')"><img src="{% static 'img/star.png' %}"></button>
                                 </div>
                             </div>
                         </div>
@@ -342,10 +344,15 @@
                                     <p>Marked Tasks</p>
                                 </div>
                                 <div name="sort" class="flex flex-row items-center mr-3 gap-2">
-                                    <a href="?sort=date"><img src="{% static 'img/clock.png' %}"></a>
-                                    <a href="?sort=importance"><img src="{% static 'img/star.png' %}"></a>
+                                    <button onclick="getMarkedTasks('date')"><img src="{% static 'img/clock.png' %}"></button>
+                                    <button onclick="getMarkedTasks('importance')"><img src="{% static 'img/star.png' %}"></button>
                                 </div>
                             </div>
+                            <script>
+                                //TODO write this to html
+                                getTasksForSchedule('date')
+                                getMarkedTasks('date')
+                            </script>
                         </div>
                         <div name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
                             <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
