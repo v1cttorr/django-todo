@@ -165,3 +165,10 @@ def joinRoom(request, invite_code):
         room.users.add(user)
 
     return redirect('room', pk=room.id)
+
+@login_required(login_url='login')
+def getMarkedTasks(request, pk):
+    room = TaskRoom.objects.get(pk=pk)
+    sort = request.GET.get('sort', 'date')
+    marked_tasks = Task.objects.filter(room=room, isMarked=True).order_by(sort)
+    return JsonResponse({'marked_tasks': list(marked_tasks.values())})
