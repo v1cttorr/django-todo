@@ -8,7 +8,20 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
+<div name="topNav" class="flex flex-row justify-between w-full">
+    <div name="topNav-content" class="flex flex-row justify-between m-6 w-full">
+        <div name="logo" class="flex flex-row gap-2 items-center">
+            <img src="{% static 'img/logo.png' %}" class="h-8" alt="logo">
+            <p class="font-normal font-Poppins tracking-widest">Taskly</p>
+        </div>
+        <div name="loginAndSignUp" class="flex flex-row items-center gap-5 mr-6">
+            <div class="flex flex-row items-center">
+                <a class="relative px-6 py-3 text-lg font-medium border-2 border-black rounded-2xl bg-[#E4EAEE] before:absolute before:inset-0 before:border-2 before:border-black before:rounded-2xl before:translate-x-[6px] before:translate-y-[6px] before:-z-10" href="/login/" class="font-normal font-Poppins text-sm">Log in</a>
+                <a class="ml-5 text-white border-2 border-[#E4EAEE] bg-[#09151B] relative px-6 py-3 text-lg font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]" href="/register/">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>
 <div name="register-container" class="flex w-full justify-center mt-20">
     <div name="register-content" class="flex flex-col items-center justify-center bg-[#F1F9FE] border-2 border-[#CED7DC] w-[30%] rounded-2xl shadow-[3px_3px_0px_#CAD1D6,3px_3px_30px_rgba(0,0,0,0.3)] px-6 py-10">
         <p class="text-[32px] font-semibold text-[#09151B] mb-6">-Sign Up-</p>
@@ -16,7 +29,7 @@
             {% csrf_token %}
             {% render_field form.firstname placeholder="First Name" class="w-[80%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#09151B] focus:outline-none placeholder-gray-500" %}
             {% render_field form.lastname placeholder="Last Name" class="w-[80%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#09151B] focus:outline-none placeholder-gray-500" %}
-            {% render_field form.username placeholder="Username" class="w-[80%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#09151B] focus:outline-none placeholder-gray-500" %}
+            <!-- {% render_field form.username placeholder="Username" class="w-[80%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#09151B] focus:outline-none placeholder-gray-500" %} -->
             {% render_field form.email placeholder="Email" class="w-[80%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#09151B] focus:outline-none placeholder-gray-500" %}
             {% render_field form.age placeholder="Age" class="w-[80%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#09151B] focus:outline-none placeholder-gray-500" %}
             {% render_field form.password1 placeholder="Password" class="w-[80%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#09151B] focus:outline-none placeholder-gray-500" %}
