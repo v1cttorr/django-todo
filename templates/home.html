@@ -1,9 +1,36 @@
+
+
 {% extends 'base.html' %}
+{% load static %}
+
+
 
 {% block content %}
-    Home <br>
-    <a href="/create-room/">Create room here!</a> <br> <br>
-    {% for room in rooms %}
-        <a href="/room/{{room.pk}}/?sort=date">{{room}}</a>
-    {% endfor %}
+<div name="topNav" class="flex flex-row justify-between w-full">
+    <div name="topNav-content" class="flex flex-row justify-between m-6 w-full">
+        <div name="logo" class="flex flex-row gap-2 items-center">
+            <img src="{% static 'img/logo.png' %}" class="h-8" alt="logo">
+            <p class="font-normal font-Poppins tracking-widest">Taskly</p>
+        </div>
+        <div name="loginAndSignUp" class="flex flex-row items-center gap-5 mr-6">
+            <div class="flex flex-row items-center">
+                <a class="relative px-6 py-3 text-lg font-medium border-2 border-black rounded-2xl bg-[#E4EAEE] before:absolute before:inset-0 before:border-2 before:border-black before:rounded-2xl before:translate-x-[6px] before:translate-y-[6px] before:-z-10" href="/login/" class="font-normal font-Poppins text-sm">Log in</a>
+                <a class="ml-5 text-white border-2 border-[#E4EAEE] bg-[#09151B] relative px-6 py-3 text-lg font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]" href="/register/">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div name="main" class="w-full h-full flex">
+    <div name="circle" class="w-[70%] aspect-1 bg-[#fddc64] rounded-full absolute translate-x-[-45%] translate-y-[-20%] overflow-hidden bg-gradient-to-tr from-[#ffaf6d] to-[rgba(0,0,0,0.1)]   z-[-1]"></div>
+    <div name="main-content" class="flex flex-col mt-[10%] ml-[8%]">
+        <p class="text-[64px] font-semibold leading-none drop-shadow-md">Organize <span class="text-[32px] text-[#393939]">your</span></p>
+        <p class="text-[80px] font-semibold leading-none drop-shadow-md">Thoughts</p>
+        <p class="text-[32px] text-[#393939] font-semibold leading-none drop-shadow-md">in <span class="text-black text-[64px]">One</span> place</p>
+        <a href="/register/" class="text-white border-2 border-[#E4EAEE] bg-[#09151B] p-6 mt-5 text-[25px] text-center font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">Start for free!</a>
+        <p class="text-[#313131] mt-4">Boost your productivity<br> with smart task management</p>
+    </div>
+    <img src="{% static 'img/tasks.png' %}" class=" ml-[20%] mt-[5%] h-[30%] flex-shrink-0 drop-shadow-[5px_5px_40px_rgba(0,0,0,0.2)]" alt="tasks">
+    
+</div>
+
 {% endblock %}
