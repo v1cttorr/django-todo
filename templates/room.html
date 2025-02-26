@@ -188,6 +188,9 @@
 
     <!-- ************** TASKS DIV **************** -->
     <!--<div id="tasks"></div>-->
+    <script>
+        var editImage = "{% static 'img/edit.png' %}";
+    </script>
 
     <script src="{% static 'js/getTasks.js' %}"></script>
 
@@ -202,7 +205,7 @@
                     <div name="helloUserAndClock-content" class="flex flex-col w-[90%] ml-10 justify-center m-10 mt-6 mb-4 border-l border-l-black pt-0 pr-10">
                         <div name="helloUserAndDate" class="flex flex-col justify-start ml-4">
 
-                            <p name="helloUser" class="font-Poppins text-[12px] text-[#818AA3] m-0 drop-shadow-md">Hello, <span class="font-medium text-[16px] drop-shadow-md">Filip</span></p> <!--Pobierz użytkownika z bazy-->
+                            <p name="helloUser" class="font-Poppins text-[12px] text-[#818AA3] m-0 drop-shadow-md">Hello, <span class="font-medium text-[16px] drop-shadow-md">{{request.user.first_name}}</span></p> <!--Pobierz użytkownika z bazy-->
                             <p name="date" class="text-[#09151B] text-[24px] font-semibold mt-[-10px]" style="filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.4));">Today is Friday 19th</p> <!--Data-->
 
                         </div>
@@ -287,32 +290,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
-                            <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
-                                <div name="time" class="flex justify-center items-center">
-                                    <p class="p-2 ml-4">7.00am</p>
+                        <!-- <div id="tasklist"> -->
+                            <div id="tasklist" name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
+                                <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                                    <div name="time" class="flex justify-center items-center">
+                                        <p class="p-2 ml-4">7.00am</p>
+                                    </div>
+                                    <div name="titleAndDescription" class="flex flex-col p-2">
+                                        <p name="title">Call your boss</p>
+                                        <p name="description" class="text-[10px] max-w-[150px]">Some boiled eggs with white cheese and  bread</p>
+                                    </div>
+                                    <div name="edit" class="m-3">
+                                        <a href="#"><img src="{% static 'img/edit.png' %}"></a>
+                                    </div>
                                 </div>
-                                <div name="titleAndDescription" class="flex flex-col p-2">
-                                    <p name="title">Call your boss</p>
-                                    <p name="description" class="text-[10px] max-w-[150px]">Some boiled eggs with white cheese and  bread</p>
-                                </div>
-                                <div name="edit" class="m-3">
-                                    <a href="#"><img src="{% static 'img/edit.png' %}"></a>
+                                <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                                    <div name="time" class="flex justify-center items-center">
+                                        <p class="p-2 ml-4">7.00am</p>
+                                    </div>
+                                    <div name="titleAndDescription" class="flex flex-col p-2">
+                                        <p name="title">Call your boss</p>
+                                        <p name="description" class="text-[10px] max-w-[150px]">Some boiled eggs with white cheese and  bread</p>
+                                    </div>
+                                    <div name="edit" class="m-3">
+                                        <a href="#"><img src="{% static 'img/edit.png' %}"></a>
+                                    </div>
                                 </div>
                             </div>
-                            <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
-                                <div name="time" class="flex justify-center items-center">
-                                    <p class="p-2 ml-4">7.00am</p>
-                                </div>
-                                <div name="titleAndDescription" class="flex flex-col p-2">
-                                    <p name="title">Call your boss</p>
-                                    <p name="description" class="text-[10px] max-w-[150px]">Some boiled eggs with white cheese and  bread</p>
-                                </div>
-                                <div name="edit" class="m-3">
-                                    <a href="#"><img src="{% static 'img/edit.png' %}"></a>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- </div> -->
                         <div name="addTask" class="ml-6 mt-3 mb-4">
                             <a href="#" class="rounded-xl border-2 border-[#09151B] p-1 pl-3 pr-3">Add Task</a>
                         </div>
@@ -348,14 +353,9 @@
                                     <button onclick="getMarkedTasks('importance')"><img src="{% static 'img/star.png' %}"></button>
                                 </div>
                             </div>
-                            <script>
-                                //TODO write this to html
-                                getTasksForSchedule('date')
-                                getMarkedTasks('date')
-                            </script>
                         </div>
-                        <div name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
-                            <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                        <div id="markedlist" name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
+                            <!-- <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
                                 <div name="time" class="flex justify-center items-center">
                                     <p class="p-2 ml-4">7.00am</p>
                                 </div>
@@ -378,12 +378,17 @@
                                 <div name="edit" class="m-3">
                                     <a href="#"><img src="{% static 'img/edit.png' %}"></a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div name="addTask" class="ml-6 mt-3 mb-4">
                             <a href="#" class="rounded-xl border-2 border-[#09151B] p-1 pl-3 pr-3">Add Task</a>
                         </div>
                     </div>
+                    <script>
+                        //TODO write this to html
+                        getTasksForSchedule('date')
+                        getMarkedTasks('date')
+                    </script>
                 </div>
             </div>  
         </div>
