@@ -35,6 +35,7 @@ class Task(models.Model):
     room = models.ForeignKey(TaskRoom, on_delete=models.CASCADE, related_name='tasks')
     date = models.DateTimeField()
     importance = models.CharField(max_length=30, choices=importance_choices, default='trivial')
+    isMarked = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
