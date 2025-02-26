@@ -5,9 +5,29 @@ function getMarkedTasks(sort) {
         type: 'GET',
         success: function(data) {
             let taskIteration = 0;
+            $('#markedlist').html('');
+
             data.marked_tasks.forEach(function (task) {
                 if(taskIteration <= 1){
-                    console.log(task)
+                    var dateObj = new Date(task.date);
+                    var hours = dateObj.getHours();
+                    var minutes = dateObj.getMinutes();
+                    var formattedTime = hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0');
+
+                    $('#markedlist').append(`
+                    <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                        <div name="time" class="flex justify-center items-center">
+                            <p class="p-2 ml-4">${formattedTime}</p>
+                        </div>
+                        <div name="titleAndDescription" class="flex flex-col p-2">
+                            <p name="title">${task.title}</p>
+                            <p name="description" class="text-[10px] max-w-[150px]">${task.description}</p>
+                        </div>
+                        <div name="edit" class="m-3">
+                            <a href="#"><img src="${editImage}"></a>
+                        </div>
+                    </div>
+                    `)
                 }
 
                 taskIteration++;
@@ -22,24 +42,30 @@ function getTasksForSchedule(sort){
         url: 'get-tasks/?sort=' + sort,
         type: 'GET',
         success: function(data) {
-            // $('#tasks').html('');
+            $('#tasklist').html('');
             let taskIteration = 0;
             data.tasks.forEach(function (task) {
 
-                //******** START TASK DIV ********
-                // $('#tasks').append(
-                //     `<div id="taskID${task.id}" onchange='completeTask(${task.id}, "task")'>` +
-                //         '<h2 class="title">' + task.title + '</h2>' +
-                //         '<h4 class="desc">' + task.description + '</h4>' +
-                //         '<h4 class="date">' + task.date + '</h4>' +
-                //         '<h4 class="importance">' + task.importance + '</h4>' +
-                //         '<input class="checkbox" type="checkbox" id="check' + task.id + '" ><br><br>' +
-                //         '<hr>' +
-                //     '</div>'
-                // );
-
                 if(taskIteration <= 1){
-                    console.log(task)
+                    var dateObj = new Date(task.date);
+                    var hours = dateObj.getHours();
+                    var minutes = dateObj.getMinutes();
+                    var formattedTime = hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0');
+
+                    $('#tasklist').append(`
+                        <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                            <div name="time" class="flex justify-center items-center">
+                                <p class="p-2 ml-4">${formattedTime}</p>
+                            </div>
+                            <div name="titleAndDescription" class="flex flex-col p-2">
+                                <p name="title">${task.title}</p>
+                                <p name="description" class="text-[10px] max-w-[150px]">${task.description}</p>
+                            </div>
+                            <div name="edit" class="m-3">
+                                <a href="#"><img src="${editImage}"></a>
+                            </div>
+                        </div>
+                    `)
                 }
                 taskIteration++;
             })
