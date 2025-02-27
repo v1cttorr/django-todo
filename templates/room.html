@@ -191,6 +191,11 @@
     <script>
         var editImage = "{% static 'img/edit.png' %}";
         var csrf_token = '{{csrf_token}}'
+        var timeImg = "{% static 'img/clock.png' %}"
+        var importanceImg = "{% static 'img/star.png' %}"
+        var bellImg = "{% static 'img/bell.png' %}"
+        var usersImg = "{% static 'img/users.png' %}"
+
     </script>
 
     <script src="{% static 'js/getTasks.js' %}"></script>
@@ -428,8 +433,8 @@
                     </div>
                 </div>
                 <script>
-                    function showHideSubtasks(){
-                        let subtasks = document.getElementById("subtasks");
+                    function showHideSubtasks(task_id){
+                        let subtasks = document.getElementById(task_id);
                         if(subtasks.style.display === "none"){
                             subtasks.style.display = "block";
                         } else {
@@ -437,9 +442,9 @@
                         }
                     }
                 </script>
-                <div name="MainTasksContainer" class="flex flex-row gap-5 w-full mt-3"> <!--Div na taski-->
-                    <div name="leftColumn" class="flex flex-col gap-4 w-[48%]">
-                        <div name="ExampleTask" onclick="showHideSubtasks()" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">
+                <div name="MainTasksContainer" id="MainTasksContainer" class="flex flex-row gap-5 w-full mt-3"> <!--Div na taski-->
+                    <div name="leftColumn" id="leftColumn" class="flex flex-col gap-4 w-[48%]">
+                        <!-- <div name="ExampleTask" onclick="showHideSubtasks()" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">
                             <div name="Task-content" class="flex flex-col m-7 ml-12">
                                 <div name="tags" class="flex flex-row gap-8 text-sm">
                                     <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
@@ -480,6 +485,12 @@
                                 </div>
 
                                 <div id="subtasks">
+                                    <script>
+                                        var subtask = document.getElementById("subtasks");
+                                        subtask.addEventListener("click", (event) => {
+                                            event.stopPropagation(); // Zatrzymanie propagacji, aby nie zamknęło diva
+                                        });
+                                    </script>
                                     <form id="subtasksForm" class="flex flex-col gap-2 p-4 rounded-lg w-fit">
                                         <label class="flex items-center gap-2 text-black text-base">
                                             <input type="checkbox" class="hidden peer" />
@@ -511,11 +522,11 @@
                                 
                                 </div>
                                 
-                            </div>
+                            </div> -->
                         </div>
                     </div>
-                    <div name="rightColumn" class="flex flex-col gap-4 w-[48%]">
-                        <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                    <div name="rightColumn" id="rightColumn" class="flex flex-col gap-4 w-[48%]">
+                        <!-- <div name="ExampleTask" <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                             <div name="Task-content" class="flex flex-col m-7 ml-12">
                                 <div name="tags" class="flex flex-row gap-8 text-sm">
                                     <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
@@ -555,7 +566,7 @@
                                     <img src="{% static 'img/users.png' %}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

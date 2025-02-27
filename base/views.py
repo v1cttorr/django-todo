@@ -136,9 +136,12 @@ def completeTask(request, pk, task_pk, task_type):
         task = Task.objects.get(id=task_pk)
     elif task_type == 'subtask':
         task = Subtask.objects.get(id=task_pk)
+        print('subtask')
+
 
     # task = Task.objects.get(id=task_pk)
     task.completed = True if request.POST.get('completed') == 'true' else False
+    print(task.completed)
     task.save()
 
     return JsonResponse({'success': 'Task completed successfully!'})
