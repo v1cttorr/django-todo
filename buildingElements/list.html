@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .div_all_task{
+            background-color: black;
+            color: white;
+            width: 400px;
+            height: 600px;
+        }
+        .div_task{
+            position: fixed;
+            right: 100px;
+            width: 350px;
+            height: 400px;
+            background-color: pink;
+            color: black;
+        }
+        .newDiv{
+            background-color: aqua;
+            width: 350px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="div_all_task" id="div_all_task">
+        <h1>zadania do zrobienia</h1>
+        <button id="button_add_task" class="button_add_task">dodaj zadanie</button>
+    </div>
+
+    <script>
+        document.getElementById("button_add_task").addEventListener("click", function() {
+            let div_all_task = document.getElementById("div_all_task");
+            let div_task = document.createElement("div");
+            div_task.className="div_task";
+            
+            let h2_podaj_godzine = document.createElement("h2");
+            h2_podaj_godzine.textContent = "podaj godzine";
+            
+            let input_podaj_godzine = document.createElement("input");
+            input_podaj_godzine.type="time";
+
+            let h2_podaj_tytul_zadania = document.createElement("h2");
+            h2_podaj_tytul_zadania.textContent = "podaj tytuł zadania";
+
+            let input_podaj_tytul_zadania = document.createElement("input");
+            input_podaj_tytul_zadania.type="text";
+
+            let div_podzadznia = document.createElement("div");
+            let button_podaj_podzadanie = document.createElement("button");
+            button_podaj_podzadanie.textContent = "dodaj podzadanie";
+            button_podaj_podzadanie.addEventListener("click", function() {
+                let div_single_podzadanie = document.createElement("div");
+                
+                let checkbox_podzadanie = document.createElement("input");
+                checkbox_podzadanie.type = "checkbox";
+                
+                let input_podzadznie = document.createElement("input");
+                input_podzadznie.type = "text";
+                input_podzadznie.placeholder = "podaj treść podzadania";
+
+                div_single_podzadanie.appendChild(checkbox_podzadanie);
+                div_single_podzadanie.appendChild(input_podzadznie);
+                div_podzadznia.appendChild(div_single_podzadanie);
+            });
+            
+            let button_zapisz_dodanie = document.createElement("button");
+            button_zapisz_dodanie.textContent = "zapisz";
+            
+            button_zapisz_dodanie.addEventListener("click", function() {
+                let godzina = input_podaj_godzine.value;
+                let tytol = input_podaj_tytul_zadania.value;
+                
+                let newDiv = document.createElement("div");
+                
+                newDiv.className="newDiv";
+                newDiv.innerHTML = `<strong>Godzina:</strong> ${godzina} <br> <strong>Tytuł:</strong> ${tytol}`;
+                
+                let podzadania = div_podzadznia.querySelectorAll("div");
+                if (podzadania.length > 0) {
+                    let ul = document.createElement("ul");
+                    podzadania.forEach(podzadanie => {
+                        let li = document.createElement("li");
+                        let checkbox = podzadanie.querySelector("input[type='checkbox']");
+                        let input = podzadanie.querySelector("input[type='text']");
+                        li.innerHTML = `<input type='checkbox'> ${input.value}`;
+                        ul.appendChild(li);
+                    });
+                    newDiv.appendChild(ul);
+                }
+                
+                div_all_task.appendChild(newDiv);
+                div_task.remove();
+            });
+            
+            div_task.appendChild(h2_podaj_godzine);
+            div_task.appendChild(input_podaj_godzine);
+            div_task.appendChild(h2_podaj_tytul_zadania);
+            div_task.appendChild(input_podaj_tytul_zadania);
+            div_task.appendChild(div_podzadznia);
+            div_task.appendChild(button_podaj_podzadanie);
+            div_task.appendChild(button_zapisz_dodanie);
+            
+            div_all_task.appendChild(div_task);
+        });
+    </script>
+</body>
+</html>
