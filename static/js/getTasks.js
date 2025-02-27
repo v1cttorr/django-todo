@@ -305,7 +305,7 @@ function getTasks(){
                 }
                 // else{
                 //     rightCol.append(`
-                //         <div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                //         <div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                 //             <div name="Task-content" class="flex flex-col m-7 ml-12">
                 //                 <div name="tags" class="flex flex-row gap-8 text-sm">
                 //                     <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
