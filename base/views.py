@@ -172,3 +172,17 @@ def getMarkedTasks(request, pk):
     sort = request.GET.get('sort', 'date')
     marked_tasks = Task.objects.filter(room=room, isMarked=True).order_by(sort)
     return JsonResponse({'marked_tasks': list(marked_tasks.values())})
+
+@login_required(login_url='login')
+def getNotes(request, pk):
+    room = TaskRoom.objects.get(pk=pk)
+    notes = room.notes
+    return JsonResponse({'notes': notes.text})
+
+@login_required(login_url='login')
+def saveNotes(request, pk):
+    room = TaskRoom.objects.get(pk=pk)
+    notes = request.POST.get('notes')
+    room.notes.text = notes
+    room.notes.save()
+    return JsonResponse({'success': 'Notes saved successfully!'})

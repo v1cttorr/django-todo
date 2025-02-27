@@ -72,3 +72,41 @@ function getTasksForSchedule(sort){
         }
     });
 }
+
+function editNotes(element){
+    var noteElement = element.parentElement.parentElement.querySelector('div[name="text"]').firstElementChild
+    noteElement.innerHTML = `<textarea name="note" >` + noteElement.innerHTML + `</textarea>`
+    + `<button onclick="saveNotes(this)">Save</button>`;
+}
+
+function saveNotes(element){
+    var noteElement = element.parentElement.parentElement.firstElementChild
+    notes = noteElement.querySelector('textarea').value
+    noteElement.innerHTML = notes;
+
+    $.ajax({
+        url: 'edit-notes/',
+        type: 'POST',
+        data: {
+            notes: notes,
+        },
+        headers: {
+            'X-CSRFToken': csrf_token,
+        },
+        success: function(data) {
+            getNotes()
+        }
+    })
+}
+
+function getNotes(){
+    $.ajax({
+        url: 'get-notes/',
+        type: 'GET',
+        success: function(data) {
+            $('#notesID').html(data.notes)
+        }
+    })
+}
+
+getNotes()

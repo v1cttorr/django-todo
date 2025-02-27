@@ -190,6 +190,7 @@
     <!--<div id="tasks"></div>-->
     <script>
         var editImage = "{% static 'img/edit.png' %}";
+        var csrf_token = '{{csrf_token}}'
     </script>
 
     <script src="{% static 'js/getTasks.js' %}"></script>
@@ -290,9 +291,14 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- ************************************* -->
+                        <!-- ************* TASK LIST ************* -->
+                        <!-- ************************************* -->
+
                         <!-- <div id="tasklist"> -->
                             <div id="tasklist" name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
-                                <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
+                                <!-- <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
                                     <div name="time" class="flex justify-center items-center">
                                         <p class="p-2 ml-4">7.00am</p>
                                     </div>
@@ -315,7 +321,7 @@
                                     <div name="edit" class="m-3">
                                         <a href="#"><img src="{% static 'img/edit.png' %}"></a>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         <!-- </div> -->
                         <div name="addTask" class="ml-6 mt-3 mb-4">
@@ -324,6 +330,10 @@
                     </div>
                 </div>
 
+                <!-- ********************************* -->
+                <!-- ************* NOTES ************* -->
+                <!-- ********************************* -->
+
                 <div name="notes" class="flex flex-col w-full bg-[#F1F9FE] rounded-lg border-[2px] border-[#ced7dcbb] shadow-[3px_3px_0px_#CAD1D6] drop-shadow-md">
                     <div name="notes-content" class="flex flex-col w-[90%] ml-6 justify-center mt-4">
                         <div name="textAndLogoAndEdit" class="flex flex-row justify-between">
@@ -331,15 +341,16 @@
                                 <img style="filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.171));" src="{% static 'img/box.png' %}">
                                 <p style="filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.4));">Your notes</p>
                             </div>
-                            <div name="edit" class="flex items-center mr-2">
+                            <div name="edit" class="flex items-center mr-2" onclick="editNotes(this)">
                                 <a href="#"><img src="{% static 'img/edit.png' %}"> </a>
                             </div>
                         </div>
                         <div name="text">
-                            <p style="max-width: 250px;color:#8A95A3;filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));" class="text-[13px] m-1 mt-2 mb-3">{{notes.text}}</p>
+                            <p style="max-width: 250px;color:#8A95A3;filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));" class="text-[13px] m-1 mt-2 mb-3" id="notesID"></p>
                         </div>
                     </div>
                 </div>
+
                 <div name="MarkedTasks" class="flex flex-col w-full bg-[#F1F9FE] rounded-lg border-[2px] border-[#ced7dcbb] shadow-[3px_3px_0px_#CAD1D6] drop-shadow-md">
                     <div name="MarkedTasks-content">
                         <div name="notes-content" class="flex flex-col w-[90%] ml-6 justify-center mt-4">
@@ -354,6 +365,9 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- *************************************** -->
+                        <!-- ************* MARKED LIST ************* -->
+                        <!-- *************************************** -->
                         <div id="markedlist" name="tasks" class="flex flex-col w-[90%] ml-4 justify-center mt-4">
                             <!-- <div name="task" class="border-2 rounded-[12px] text-white flex flex-row justify-between gap-2 bg-[#09151B]" style="filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.2));">
                                 <div name="time" class="flex justify-center items-center">

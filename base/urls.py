@@ -10,6 +10,9 @@ urlpatterns = [
     path('room/<int:pk>/add-subtask/', views.addSubtask, name='addSubtask'),
     path('room/<int:pk>/get-tasks/', views.getTasks, name='getTasks'),
     path('room/<int:pk>/get-marked-tasks/', views.getMarkedTasks, name='getMarkedTasks'),
+    
+    path('room/<int:pk>/get-notes/', views.getNotes, name='getNotes'),
+    path('room/<int:pk>/edit-notes/', views.saveNotes, name='saveNotes'),
 
 
     path('room/<int:pk>/complete-task/<int:task_pk>/<str:task_type>/', views.completeTask, name='completeTask'), #task type: task or subtask
