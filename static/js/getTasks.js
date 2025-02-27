@@ -173,224 +173,135 @@ function getTasks(){
                 //     '</div>'
                 // );
                 // document.getElementById('check' + task.id).checked = task.completed; //SET CHECKBOX STATE FROM DATABASE
+                let firstLineElementLeft = `<div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">`
+                let firstLineElementRight = `<div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')"class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">`
+                 
                 if(taskIteration%2){
-                // if(true){
-                    leftCol.append(`
-                        <div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">
-                            <div name="Task-content" class="flex flex-col m-7 ml-12">
-                                <div name="tags" class="flex flex-row gap-8 text-sm">
-                                    <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                        <img src="${timeImg}" class="h-[20px]"> ${task.date}
-                                    </p>
-                                    <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                        <img src="${importanceImg}" class="h-[20px]"> Easy Task
-                                    </p>
-                                    <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                        <img src="${bellImg}" class="h-[20px]"> Notification - Yes
-                                    </p>
-                                </div>
-                                <div name="title" class="mt-4 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                    <p class="font-semibold text-[20px]">${task.title}</p>
-                                </div>
-                                <div name="desciption" class="mt-2">
-                                    <p name="description-text" class="text-[12px] max-w-[70%] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                        ${task.description}
-                                    </p>
-                                </div>
-                                <div name="task-progress">
-                                    <div name="currentProgress">
-                                        <p class="font-normal text-sm mt-2 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                            Current Progress - <span id="percentOfCompletedTasks">25%</span>
-                                        </p>
-                                    </div>
-                                    <div name="progressBar" class="relative w-[300px] h-[15px] rounded-[5px] bg-[#CACACA] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                        <div id="progress" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
-                                    </div>
-                                    <div name="completedTasks" class="mt-1.5">
-                                        <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                            <span id="tasksDone">5</span>/<span id="allTasks">20</span> tasks are done!
-                                        </p>
-                                    </div>
-                                </div>
-                                <div name="people" class="flex flex-row mt-3">
-                                    <img src="${usersImg}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                </div>
-                                <div id="subtasks${task.id}">
-                                    <script>
-                                        var subtask = document.getElementById("subtasks${task.id}");
-                                        subtask.addEventListener("click", (event) => {
-                                            event.stopPropagation();
-                                        });
-                                    </script>
-                                    <div id="subtasksForm${task.id}" class="flex flex-col gap-2 p-4 rounded-lg w-fit">
-                                        <label class="flex items-center gap-2 text-black text-base">
-                                            <input type="checkbox" class="hidden peer" />
-                                            <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
-                                            </span>
-                                            Call client
-                                        </label>
-                                
-                                        <label class="flex items-center gap-2 text-black text-base">
-                                            <input type="checkbox" class="hidden peer" />
-                                            <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
-                                            </span>
-                                            Talk about preferences
-                                        </label>
-                                
-                                        <label class="flex items-center gap-2 text-black text-base">
-                                            <input type="checkbox" class="hidden peer" />
-                                            <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
-                                                <svg class="w-3 h-3 text-white hidden peer-checked:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                                </svg>
-                                            </span>
-                                            Visualize his idea
-                                        </label>
-
-                                        <form method="POST" name="addSubtask" class="w-fit mt-1">
-                                            <input type="text" name="title" placeholder="Add subtask..." class="outline-none bg-transparent text-black text-base" style="all:unset">
-                                        </form>
-                                    </div>
-                                
-                                </div>
-                                
+                    var currentCol = leftCol
+                    var line = firstLineElementLeft
+                    console.log('a')
+                }
+                else{
+                    var currentCol = rightCol
+                    var line = firstLineElementRight
+                    console.log('v')
+                }
+                console.log(currentCol)
+                currentCol.append(line
+                    +`
+                    <div name="Task-content" class="flex flex-col m-7 ml-12">
+                        <div name="tags" class="flex flex-row gap-8 text-sm">
+                            <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                <img src="${timeImg}" class="h-[20px]"> ${task.date}
+                            </p>
+                            <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                <img src="${importanceImg}" class="h-[20px]"> Easy Task
+                            </p>
+                            <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                <img src="${bellImg}" class="h-[20px]"> Notification - Yes
+                            </p>
+                        </div>
+                        <div name="title" class="mt-4 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                            <p class="font-semibold text-[20px]">${task.title}</p>
+                        </div>
+                        <div name="desciption" class="mt-2">
+                            <p name="description-text" class="text-[12px] max-w-[70%] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                ${task.description}
+                            </p>
+                        </div>
+                        <div name="task-progress">
+                            <div name="currentProgress">
+                                <p class="font-normal text-sm mt-2 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                    Current Progress - <span id="percentOfCompletedTasks">25%</span>
+                                </p>
+                            </div>
+                            <div name="progressBar" class="relative w-[300px] h-[15px] rounded-[5px] bg-[#CACACA] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                <div id="progress" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
+                            </div>
+                            <div name="completedTasks" class="mt-1.5">
+                                <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                    <span id="tasksDone">5</span>/<span id="allTasks">20</span> tasks are done!
+                                </p>
                             </div>
                         </div>
-                    </div>
-                    `)
-
-                    var subtaskForm = document.getElementById(`subtasksForm${task.id}`);
-                    subtaskForm.innerHTML = ''
-                    // //******** START SUBTASKS DIV ********
-                    data.subtasks.forEach(function(subtask){
-                        if(subtask.task_id == task.id){
-                            subtaskForm.innerHTML += 
-                                `
-                                <label class="flex items-center gap-2 text-black text-base" id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask")'>
-                                    <input type="checkbox" class="hidden peer checkboxState" id="subcheck` + subtask.id + `"  />
+                        <div name="people" class="flex flex-row mt-3">
+                            <img src="${usersImg}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                        </div>
+                        <div id="subtasks${task.id}">
+                            <script>
+                                var subtask = document.getElementById("subtasks${task.id}");
+                                subtask.addEventListener("click", (event) => {
+                                    event.stopPropagation();
+                                });
+                            </script>
+                            <div id="subtasksForm${task.id}" class="flex flex-col gap-2 p-4 rounded-lg w-fit">
+                                <label class="flex items-center gap-2 text-black text-base">
+                                    <input type="checkbox" class="hidden peer" />
                                     <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
                                     </span>
-                                    ${subtask.title}
+                                    Call client
                                 </label>
-                                `
-                                
-                            document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
+                        
+                                <label class="flex items-center gap-2 text-black text-base">
+                                    <input type="checkbox" class="hidden peer" />
+                                    <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
+                                    </span>
+                                    Talk about preferences
+                                </label>
+                        
+                                <label class="flex items-center gap-2 text-black text-base">
+                                    <input type="checkbox" class="hidden peer" />
+                                    <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
+                                        <svg class="w-3 h-3 text-white hidden peer-checked:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
+                                    Visualize his idea
+                                </label>
+                                <form method="POST" name="addSubtask" class="w-fit mt-1">
+                                    <input type="text" name="title" placeholder="Add subtask..." class="outline-none bg-transparent text-black text-base" style="all:unset">
+                                </form>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
+                `)
+                var subtaskForm = document.getElementById(`subtasksForm${task.id}`);
+                subtaskForm.innerHTML = ''
+                // //******** START SUBTASKS DIV ********
+                data.subtasks.forEach(function(subtask){
+                    if(subtask.task_id == task.id){
+                        subtaskForm.innerHTML += 
+                            `
+                            <label class="flex items-center gap-2 text-black text-base" id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask")'>
+                                <input type="checkbox" class="hidden peer checkboxState" id="subcheck` + subtask.id + `"  />
+                                <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
+                                </span>
+                                ${subtask.title}
+                            </label>
+                            `
                             
-                            // console.log(subtask.title + ": " + subtask.completed + ":: " + typeof(subtask.completed))
-                        }
-                    })
-
-                    // data.subtasks.forEach(function(subtask){
-                    //     if(subtask.task_id == task.id){
-                    //         const checkbox = document.getElementById('subcheck' + subtask.id);
-                    //         if (checkbox) {
-                    //             checkbox.checked = subtask.completed === true || subtask.completed === 'true';
-                    //         }
-                    //     }
-                    // });
+                            setTimeout(() => {
+                                document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
+                            }, 0);
+                        
+                        // console.log(subtask.title + ": " + subtask.completed + ":: " + typeof(subtask.completed))
+                    }
+                })
 
 
-                    subtaskForm.innerHTML += `
-                        <form method="POST" name="addSubtask" class="w-fit mt-1" id="addSubtask` + task.id + `" onsubmit="addSubtask(` + task.id + `)">
-                            <input type="text" name="title" placeholder="Add subtask..." class="outline-none bg-transparent text-black text-base" style="all:unset">
-                            <input type="submit" value="Add Subtask">
-                        </form>
-                    `
-                    //     '<form method="POST" id="addSubtask' + task.id + '" onsubmit="addSubtask(' + task.id + ')">' +
-                    //         '{% csrf_token %}' +
-                    //         '<br><input type="text" name="title" placeholder="Title">' +
-                    //         '<input type="submit" value="Add Subtask">' +
-                    //     '</form>'
 
-                }
-                // else{
-                //     rightCol.append(`
-                //         <div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //             <div name="Task-content" class="flex flex-col m-7 ml-12">
-                //                 <div name="tags" class="flex flex-row gap-8 text-sm">
-                //                     <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                         <img src="${timeImg}" class="h-[20px]"> ${task.date}
-                //                     </p>
-                //                     <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                         <img src="${importanceImg}" class="h-[20px]"> Easy Task
-                //                     </p>
-                //                     <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                         <img src="${bellImg}" class="h-[20px]"> Notification - Yes
-                //                     </p>
-                //                 </div>
-                //                 <div name="title" class="mt-4 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                     <p class="font-semibold text-[20px]">${task.title}</p>
-                //                 </div>
-                //                 <div name="desciption" class="mt-2">
-                //                     <p name="description-text" class="text-[12px] max-w-[70%] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                         ${task.description}
-                //                     </p>
-                //                 </div>
-                //                 <div name="task-progress">
-                //                     <div name="currentProgress">
-                //                         <p class="font-normal text-sm mt-2 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                             Current Progress - <span id="percentOfCompletedTasks">25%</span>
-                //                         </p>
-                //                     </div>
-                //                     <div name="progressBar" class="relative w-[300px] h-[15px] rounded-[5px] bg-[#CACACA] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                         <div id="progress" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
-                //                     </div>
-                //                     <div name="completedTasks" class="mt-1.5">
-                //                         <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                             <span id="tasksDone">5</span>/<span id="allTasks">20</span> tasks are done!
-                //                         </p>
-                //                     </div>
-                //                 </div>
-                //                 <div name="people" class="flex flex-row mt-3">
-                //                     <img src="${usersImg}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                //                 </div>
-                //                 <div id="subtasks${task.id}">
-                //                     <script>
-                //                         var subtask = document.getElementById("subtasks${task.id}");
-                //                         subtask.addEventListener("click", (event) => {
-                //                             event.stopPropagation();
-                //                         });
-                //                     </script>
-                //                     <div id="subtasksForm${task.id}" class="flex flex-col gap-2 p-4 rounded-lg w-fit">
-                //                         <label class="flex items-center gap-2 text-black text-base">
-                //                             <input type="checkbox" class="hidden peer" />
-                //                             <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
-                //                             </span>
-                //                             Call client
-                //                         </label>
-                                
-                //                         <label class="flex items-center gap-2 text-black text-base">
-                //                             <input type="checkbox" class="hidden peer" />
-                //                             <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
-                //                             </span>
-                //                             Talk about preferences
-                //                         </label>
-                                
-                //                         <label class="flex items-center gap-2 text-black text-base">
-                //                             <input type="checkbox" class="hidden peer" />
-                //                             <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
-                //                                 <svg class="w-3 h-3 text-white hidden peer-checked:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                //                                     <polyline points="20 6 9 17 4 12"></polyline>
-                //                                 </svg>
-                //                             </span>
-                //                             Visualize his idea
-                //                         </label>
-
-                //                         <form name="addSubtask" class="w-fit mt-1">
-                //                             <input type="text" name="title" placeholder="Add subtask..." class="outline-none bg-transparent text-black text-base" style="all:unset">
-                //                         </form>
-                //                     </div>
-                                
-                //                 </div>
-                                
-                //             </div>
-                //         </div>
-                //     </div>
-                //     `)
-                // }
+                subtaskForm.innerHTML += `
+                    <div name="addSubtask" class="w-fit mt-1" id="addSubtask` + task.id + `" >
+                        <input type="text" name="title" placeholder="Add subtask..." class="outline-none bg-transparent text-black text-base" style="all:unset">
+                        
+                        <button onclick="addSubtask(` + task.id + `)">Add Subtask</button>
+                    </div>
+                `
             })
         }
     });
+    console.log('csrf', csrf_token)
 }
 getTasks()
 
@@ -412,7 +323,6 @@ function completeTask(id, task_type){
             'X-CSRFToken': csrf_token,
         },
         success: function(response) {
-            // getTasks()
         },
         error: function(xhr, status, error) {
             console.error('Blad AJAX:', status, error);
@@ -421,12 +331,13 @@ function completeTask(id, task_type){
 }
 
 //*************** ADD SUBTASK ***************
-/*
 function addSubtask(task_id){
+    console.log(csrf_token)
     var title = document.getElementById('addSubtask' + task_id).querySelector('input[name="title"]').value
     $.ajax({
         url: 'add-subtask/',
         type: 'POST',
+        contentType: 'application/x-www-form-urlencoded',
         data: {
             title: title,
             task_id: task_id,
@@ -438,4 +349,4 @@ function addSubtask(task_id){
             getTasks()
         }
     });
-}*/
+}
