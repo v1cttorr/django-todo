@@ -256,7 +256,6 @@ function getTasks(){
                                 
                             </div>
                         </div>
-                    </div>
                     `)
 
                     var subtaskForm = document.getElementById(`subtasksForm${task.id}`);
@@ -274,7 +273,9 @@ function getTasks(){
                                 </label>
                                 `
                                 
-                            document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
+                                setTimeout(() => {
+                                    document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
+                                }, 0);
                             
                             // console.log(subtask.title + ": " + subtask.completed + ":: " + typeof(subtask.completed))
                         }
