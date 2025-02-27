@@ -386,6 +386,117 @@
                     </div>
                 </div>
             </div>  
+            <div name="right-column" class="flex flex-col gap-2 ml-4 w-full"> <!--Prawa kolumna z  paskiem wyboru listy, przyciskiem  dodawania taska oraz sortowania-->
+                <div name="buttons"  class="flex flex-row w-full bg-[#F1F9FE] rounded-lg border-[2px] border-[#ced7dcbb] shadow-[3px_3px_0px_#CAD1D6] drop-shadow-md">
+                    <div name="buttons-content" class="flex flex-row justify-between w-full m-3 items-center">
+                        <div class="flex flex-row gap-2">
+                            <div name="addTask">
+                                <button class="text-white border-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">
+                                    Add Task
+                                </button>
+                            </div>
+                            <div name="lists" class="m-4">
+                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List one</a>
+                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List two</a>
+                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List three</a>
+                            </div>
+                        </div>
+                        <div name="sort" class="flex flex-row items-center gap-5 mr-5">
+                            <p>Sort by:</p>
+                            <button onclick="">Time</button>
+                            <button onclick="">Importance</button>
+                        </div>
+                    </div>
+                </div>
+                <div name="MainTasksContainer" class="flex flex-row gap-5 w-full mt-3"> <!--Div na taski-->
+                    <div name="leftColumn" class="flex flex-col gap-4 w-[48%]">
+                        <div name="ExampleTask" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                            <div name="Task-content" class="flex flex-col m-7 ml-12">
+                                <div name="tags" class="flex flex-row gap-8 text-sm">
+                                    <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> 11.00 AM
+                                    </p>
+                                    <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> Easy Task
+                                    </p>
+                                    <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> Notification - Yes
+                                    </p>
+                                </div>
+                                <div name="title" class="mt-4 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                    <p class="font-semibold text-[20px]">Design UI Dashboard</p>
+                                </div>
+                                <div name="desciption" class="mt-2">
+                                    <p name="description-text" class="text-[12px] max-w-[70%] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        Create a modern UI for the task management dashboard with a clean layout.
+                                    </p>
+                                </div>
+                                <div name="task-progress">
+                                    <div name="currentProgress">
+                                        <p class="font-normal text-sm mt-2 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                            Current Progress - <span id="percentOfCompletedTasks">25%</span>
+                                        </p>
+                                    </div>
+                                    <div name="progressBar" class="relative w-[300px] h-[15px] rounded-[5px] bg-[#CACACA] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <div id="progress" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
+                                    </div>
+                                    <div name="completedTasks" class="mt-1.5">
+                                        <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                            <span id="tasksDone">5</span>/<span id="allTasks">20</span> tasks are done!
+                                        </p>
+                                    </div>
+                                </div>
+                                <div name="people" class="flex flex-row mt-3">
+                                    <img src="{% static 'img/users.png' %}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div name="rightColumn" class="flex flex-col gap-4 w-[48%]">
+                        <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                            <div name="Task-content" class="flex flex-col m-7 ml-12">
+                                <div name="tags" class="flex flex-row gap-8 text-sm">
+                                    <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> 11.00 AM
+                                    </p>
+                                    <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> Easy Task
+                                    </p>
+                                    <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> Notification - Yes
+                                    </p>
+                                </div>
+                                <div name="title" class="mt-4 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                    <p class="font-semibold text-[20px]">Design UI Dashboard</p>
+                                </div>
+                                <div name="desciption" class="mt-2">
+                                    <p name="description-text" class="text-[12px] max-w-[70%] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        Create a modern UI for the task management dashboard with a clean layout.
+                                    </p>
+                                </div>
+                                <div name="task-progress">
+                                    <div name="currentProgress">
+                                        <p class="font-normal text-sm mt-2 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                            Current Progress - <span id="percentOfCompletedTasks">25%</span>
+                                        </p>
+                                    </div>
+                                    <div name="progressBar" class="relative w-[300px] h-[15px] rounded-[5px] bg-[#CACACA] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                        <div id="progress" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
+                                    </div>
+                                    <div name="completedTasks" class="mt-1.5">
+                                        <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                            <span id="tasksDone">5</span>/<span id="allTasks">20</span> tasks are done!
+                                        </p>
+                                    </div>
+                                </div>
+                                <div name="people" class="flex flex-row mt-3">
+                                    <img src="{% static 'img/users.png' %}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
