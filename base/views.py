@@ -17,6 +17,7 @@ def home(request):
 
     try:
         rooms = user.rooms.all()
+        return redirect('room', pk=rooms[0].id)
     except:
         rooms = None
 

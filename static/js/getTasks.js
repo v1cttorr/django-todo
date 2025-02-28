@@ -118,8 +118,7 @@ getNotes()
 
 
 // *************** GET TASKS ***************
-function getTasks(){
-    sort = 'date'
+function getTasks(sort){
     $.ajax({
         url: 'get-tasks/?sort=' + sort,
         type: 'GET',
@@ -128,9 +127,10 @@ function getTasks(){
             var rightCol =  $('#rightColumn')
             leftCol.html('');
             rightCol.html('');
-            console.log(data)
 
             var taskIteration = 0;
+
+            //LOOP FOR EACH TASK
             data.tasks.forEach(function (task) {
                 taskIteration++
                 //*********************************
@@ -173,20 +173,25 @@ function getTasks(){
                 //     '</div>'
                 // );
                 // document.getElementById('check' + task.id).checked = task.completed; //SET CHECKBOX STATE FROM DATABASE
+
+
+
+                // TODO
+                // poprawic progress bar do kazdego diva
+
                 let firstLineElementLeft = `<div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">`
                 let firstLineElementRight = `<div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')"class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">`
                  
                 if(taskIteration%2){
                     var currentCol = leftCol
                     var line = firstLineElementLeft
-                    console.log('a')
                 }
                 else{
                     var currentCol = rightCol
                     var line = firstLineElementRight
-                    console.log('v')
                 }
-                console.log(currentCol)
+
+                //ADD TASK TO COLUMN
                 currentCol.append(line
                     +`
                     <div name="Task-content" class="flex flex-col m-7 ml-12">
@@ -195,7 +200,7 @@ function getTasks(){
                                 <img src="${timeImg}" class="h-[20px]"> ${task.date}
                             </p>
                             <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                <img src="${importanceImg}" class="h-[20px]"> Easy Task
+                                <img src="${importanceImg}" class="h-[20px]"> ${task.importance}
                             </p>
                             <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 <img src="${bellImg}" class="h-[20px]"> Notification - Yes
@@ -220,7 +225,7 @@ function getTasks(){
                             </div>
                             <div name="completedTasks" class="mt-1.5">
                                 <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                    <span id="tasksDone">5</span>/<span id="allTasks">20</span> tasks are done!
+                                    <span id="tasksDone${task.id}">5</span>/<span id="allTasks${task.id}">20</span> tasks are done!
                                 </p>
                             </div>
                         </div>
@@ -266,14 +271,21 @@ function getTasks(){
                     </div>
                 </div>
                 `)
+
+
+                //******************** START SUBTASKS DIV *********************
                 var subtaskForm = document.getElementById(`subtasksForm${task.id}`);
+                var subtask_complete = 0
+                var subtask_all = 0
+                
                 subtaskForm.innerHTML = ''
-                // //******** START SUBTASKS DIV ********
+
+                //LOOP FOR EACH SUBTASK
                 data.subtasks.forEach(function(subtask){
                     if(subtask.task_id == task.id){
                         subtaskForm.innerHTML += 
                             `
-                            <label class="flex items-center gap-2 text-black text-base" id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask")'>
+                            <label class="flex items-center gap-2 text-black text-base" id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask", "${sort}")'>
                                 <input type="checkbox" class="hidden peer checkboxState" id="subcheck` + subtask.id + `"  />
                                 <span class="w-4 h-4 border-2 border-black flex items-center justify-center peer-checked:bg-black">
                                 </span>
@@ -284,31 +296,36 @@ function getTasks(){
                             setTimeout(() => {
                                 document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
                             }, 0);
-                        
-                        // console.log(subtask.title + ": " + subtask.completed + ":: " + typeof(subtask.completed))
+                            
+                            if(subtask.completed){
+                                subtask_complete++
+                            }
+                            subtask_all++
                     }
                 })
 
+                $('#tasksDone'+task.id).html(subtask_complete)
+                $('#allTasks'+task.id).html(subtask_all)
 
-
+                // nie zmieniac div na form bo bedzie dzialac gorzej
+                //ADD SUBTASK FORM TO TASK
                 subtaskForm.innerHTML += `
-                    <div name="addSubtask" class="w-fit mt-1" id="addSubtask` + task.id + `" >
+                    <div name="addSubtask" class="w-fit mt-1" id="addSubtask` + task.id + `">
                         <input type="text" name="title" placeholder="Add subtask..." class="outline-none bg-transparent text-black text-base" style="all:unset">
                         
-                        <button onclick="addSubtask(` + task.id + `)">Add Subtask</button>
+                        <button onclick="addSubtask(${task.id}, '${sort.toString()}')">Add Subtask</button>
                     </div>
                 `
             })
         }
     });
-    console.log('csrf', csrf_token)
 }
-getTasks()
+getTasks('date')
 
 
 //*************** SAVE COMPLETE TASK ***************
 //********* task_type: task or subtask *************
-function completeTask(id, task_type){
+function completeTask(id, task_type, sort){
     task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
     // console.log(task.find('.checkbox'))
     // console.log(task.find('.checkbox').prop('checked'))
@@ -323,6 +340,7 @@ function completeTask(id, task_type){
             'X-CSRFToken': csrf_token,
         },
         success: function(response) {
+            getTasks(sort)
         },
         error: function(xhr, status, error) {
             console.error('Blad AJAX:', status, error);
@@ -331,7 +349,7 @@ function completeTask(id, task_type){
 }
 
 //*************** ADD SUBTASK ***************
-function addSubtask(task_id){
+function addSubtask(task_id, sort){
     console.log(csrf_token)
     var title = document.getElementById('addSubtask' + task_id).querySelector('input[name="title"]').value
     $.ajax({
@@ -346,7 +364,7 @@ function addSubtask(task_id){
             'X-CSRFToken': csrf_token,
         },
         success: function(response) {
-            getTasks()
+            getTasks(sort)
         }
     });
 }
