@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/room.css' %}">
+    <link rel="stylesheet" href="{% static 'css/room.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -420,13 +420,14 @@
                                 </button>
                             </div>
                             <div name="lists" class="m-4">
-                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List one</a>
-                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List two</a>
-                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List three</a>
+                                {% for room in rooms %}
+                                    <a href="/room/{{room.pk}}/" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">{{room.title}}</a>
+                                {% endfor %}
                             </div>
                         </div>
                         <div name="sort" class="flex flex-row items-center gap-5 mr-5">
                             <p>Sort by:</p>
+                            <!-- TODO make it bold -->
                             <button onclick="getTasks('date')">Time</button>
                             <button onclick="getTasks('importance')">Importance</button>
                         </div>

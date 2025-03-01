@@ -73,10 +73,15 @@ function getTasksForSchedule(sort){
     });
 }
 
+var isEditingNote = false
+
 function editNotes(element){
-    var noteElement = element.parentElement.parentElement.querySelector('div[name="text"]').firstElementChild
-    noteElement.innerHTML = `<textarea name="note" >` + noteElement.innerHTML + `</textarea>`
-    + `<button onclick="saveNotes(this)">Save</button>`;
+    if(!isEditingNote){
+        var noteElement = element.parentElement.parentElement.querySelector('div[name="text"]').firstElementChild
+        noteElement.innerHTML = `<textarea name="note" >` + noteElement.innerHTML + `</textarea>`
+        + `<button onclick="saveNotes(this)">Save</button>`;
+        isEditingNote = true
+    }   
 }
 
 function saveNotes(element){
@@ -97,6 +102,7 @@ function saveNotes(element){
             getNotes()
         }
     })
+    isEditingNote = false
 }
 
 function getNotes(){
@@ -111,13 +117,7 @@ function getNotes(){
 
 getNotes()
 
-//**********************************************
-
-
-
-
-
-// *************** GET TASKS ***************
+// ***************** GET TASKS *****************
 function getTasks(sort){
     $.ajax({
         url: 'get-tasks/?sort=' + sort,
@@ -133,48 +133,6 @@ function getTasks(sort){
             //LOOP FOR EACH TASK
             data.tasks.forEach(function (task) {
                 taskIteration++
-                //*********************************
-                // HERE ARE ELEMENTS WITH THE TASKS
-                //*********************************
-                //******** START TASK DIV ********
-                // $('#tasks').append(
-                //     `<div id="taskID${task.id}" onchange='completeTask(${task.id}, "task")'>` +
-                //         '<h2 class="title">' + task.title + '</h2>' +
-                //         '<h4 class="desc">' + task.description + '</h4>' +
-                //         '<h4 class="date">' + task.date + '</h4>' +
-                //         '<h4 class="importance">' + task.importance + '</h4>' +
-                //         '<input class="checkbox" type="checkbox" id="check' + task.id + '" ><br><br>'
-                // )
-                // //******** START SUBTASKS DIV ********
-                // data.subtasks.forEach(function(subtask){
-                //     if(subtask.task_id == task.id){
-                //         $('#tasks').append(
-                //             `<div id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask")'>` +
-                //                 subtask.title +
-                //                 '<input type="checkbox" class="checkbox" id="subcheck' + subtask.id + '" >' +
-                //             '</div>'
-                //         )
-                //         document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
-                //     }
-                // })
-                // //******** END SUBTASKS DIV **********
-                // //******** START ADD SUBTASK FORM ********
-                // $('#tasks').append(
-                //     '<form method="POST" id="addSubtask' + task.id + '" onsubmit="addSubtask(' + task.id + ')">' +
-                //         '{% csrf_token %}' +
-                //         '<br><input type="text" name="title" placeholder="Title">' +
-                //         '<input type="submit" value="Add Subtask">' +
-                //     '</form>'
-                // )
-                // //******** END ADD SUBTASK FORM ********
-                // //******* END TASK DIV *******
-                // $('#tasks').append(
-                //         '<hr>' +
-                //     '</div>'
-                // );
-                // document.getElementById('check' + task.id).checked = task.completed; //SET CHECKBOX STATE FROM DATABASE
-
-
 
                 // TODO
                 // poprawic progress bar do kazdego diva
@@ -200,7 +158,7 @@ function getTasks(sort){
                                 <img src="${timeImg}" class="h-[20px]"> ${task.date}
                             </p>
                             <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                <img src="${importanceImg}" class="h-[20px]"> ${task.importance}
+                                <img src="${importanceImg}" class="h-[20px]"> ${task.importance_label}
                             </p>
                             <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 <img src="${bellImg}" class="h-[20px]"> Notification - Yes
@@ -327,8 +285,6 @@ getTasks('date')
 //********* task_type: task or subtask *************
 function completeTask(id, task_type, sort){
     task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
-    // console.log(task.find('.checkbox'))
-    // console.log(task.find('.checkbox').prop('checked'))
     console.log(task.find('.checkboxState').prop('checked'))
     $.ajax({
         url: 'complete-task/' + id + '/' + task_type + '/',

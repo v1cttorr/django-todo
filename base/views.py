@@ -21,11 +21,7 @@ def home(request):
     except:
         rooms = None
 
-    context = {
-        'rooms': rooms,
-    }
-
-    return render(request, 'home.html', context)
+    return render(request, 'home.html')
 
 @login_required(login_url='login')
 def createRoom(request):
@@ -58,10 +54,13 @@ def room(request, pk):
     users = room.users.all()
     notes = room.notes
 
+    rooms = user.rooms.all()
+
     context = {
         'room': room,
         'users': users,
         'notes': notes,
+        'rooms': rooms,
     }
 
     return render(request, 'room.html', context)
@@ -121,7 +120,8 @@ def getTasks(request, pk):
             'description': task.description,
             'completed': task.completed,
             'date': formatted_date,
-            'importance': task.importance#.get_importance_display(),
+            'importance': task.importance,
+            'importance_label': task.get_importance_display(),
         })
 
         # subtasks_data.append(task.subtasks.all())
