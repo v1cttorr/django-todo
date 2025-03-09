@@ -423,6 +423,7 @@
                                 {% for room in rooms %}
                                     <a href="/room/{{room.pk}}/" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">{{room.title}}</a>
                                 {% endfor %}
+                                <a href="/create-room/" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">+</a>
                             </div>
                         </div>
                         <div name="sort" class="flex flex-row items-center gap-5 mr-5">
@@ -527,7 +528,7 @@
                         <!-- </div> -->
                     </div>
                     <div name="rightColumn" id="rightColumn" class="flex flex-col gap-4 w-[48%]">
-                        <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                        <!-- <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                             <div name="Task-content" class="flex flex-col m-7 ml-12">
                                 <div name="tags" class="flex flex-row gap-8 text-sm">
                                     <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
@@ -567,7 +568,7 @@
                                     <img src="{% static 'img/users.png' %}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 </div>
                             </div>
-                        </div> 
+                        </div>  -->
                     </div>
                 </div>
             </div>

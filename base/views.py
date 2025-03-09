@@ -122,12 +122,12 @@ def getTasks(request, pk):
             'date': formatted_date,
             'importance': task.importance,
             'importance_label': task.get_importance_display(),
+            'background_color': task.background_color,
         })
 
         # subtasks_data.append(task.subtasks.all())
 
     subtasks_data = list((Subtask.objects.filter(task__room=room)).values())
-    # print(subtasks_data)
 
     return JsonResponse({'tasks': tasks_data, 'subtasks': subtasks_data})
 
@@ -135,14 +135,14 @@ def getTasks(request, pk):
 def completeTask(request, pk, task_pk, task_type):
     if task_type == 'task':
         task = Task.objects.get(id=task_pk)
+        print('task', task.completed)
     elif task_type == 'subtask':
         task = Subtask.objects.get(id=task_pk)
         print('subtask')
+    
+    completed = True if request.POST.get('completed') == 'true' else False
 
-
-    # task = Task.objects.get(id=task_pk)
-    task.completed = True if request.POST.get('completed') == 'true' else False
-    print(task.completed)
+    task.completed = completed
     task.save()
 
     return JsonResponse({'success': 'Task completed successfully!'})
