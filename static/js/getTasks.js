@@ -262,6 +262,7 @@ function getTasks(sort){
                     }
                 })
 
+
                 $('#tasksDone'+task.id).html(subtask_complete)
                 $('#allTasks'+task.id).html(subtask_all)
 
