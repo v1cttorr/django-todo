@@ -16,6 +16,8 @@ urlpatterns = [
 
 
     path('room/<int:pk>/complete-task/<int:task_pk>/<str:task_type>/', views.completeTask, name='completeTask'), #task type: task or subtask
+    path('room/<int:pk>/get-completed-tasks/', views.getCompletedTasks, name='getCompletedTasksTask'),
+    
     path('room/<int:pk>/remove/<int:user_pk>/', views.removeUserFromRoom, name='removeUserFromRoom'),
     
     path('join/<str:invite_code>/', views.joinRoom, name='joinRoom'),

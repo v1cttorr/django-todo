@@ -135,7 +135,7 @@ def getTasks(request, pk):
 def completeTask(request, pk, task_pk, task_type):
     if task_type == 'task':
         task = Task.objects.get(id=task_pk)
-        print('task', task.completed)
+        print('task')
     elif task_type == 'subtask':
         task = Subtask.objects.get(id=task_pk)
         print('subtask')
@@ -146,6 +146,16 @@ def completeTask(request, pk, task_pk, task_type):
     task.save()
 
     return JsonResponse({'success': 'Task completed successfully!'})
+
+def getCompletedTasks(request, pk):
+    room = TaskRoom.objects.get(id=pk)
+    tasks = room.tasks.filter(completed=True).count()
+    all_tasks = room.tasks.all().count()
+
+    print('click')
+
+    return JsonResponse({'completed_tasks': tasks, 'all_tasks': all_tasks})
+
 
 def removeUserFromRoom(request, pk, user_pk):
     room = TaskRoom.objects.get(id=pk)

@@ -129,16 +129,12 @@ function getTasks(sort){
             rightCol.html('');
 
             var taskIteration = 0;
-            
-            var tasks_complete = 0
 
 
             //LOOP FOR EACH TASK
             data.tasks.forEach(function (task) {
                 taskIteration++
 
-                if(task.completed)
-                    tasks_complete++
 
                 // TODO
                 // poprawic progress bar do kazdego diva
@@ -274,7 +270,7 @@ function getTasks(sort){
                     completeTask(task.id, 'task', sort, true)
                 }
                 else{
-                    completeTask(task.id, 'task', sort)
+                    completeTask(task.id, 'task', sort, false)
                 }
 
                 //nie zmieniac div na form bo bedzie dzialac gorzej
@@ -290,7 +286,13 @@ function getTasks(sort){
         }
     });
 }
+
+
+
 getTasks('date')
+increaseMainProgress()
+
+
 
 
 //*************** SAVE COMPLETE TASK ***************
@@ -298,8 +300,9 @@ getTasks('date')
 function completeTask(id, task_type, sort, task_complete=false){
     task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
 
-    if(task_type == 'task')
+    if(task_type == 'task'){
         var completed = task_complete
+    }
     else
         var completed = task.find('.checkboxState').prop('checked')
 
@@ -313,14 +316,19 @@ function completeTask(id, task_type, sort, task_complete=false){
             'X-CSRFToken': csrf_token,
         },
         success: function(response) {
-            if(task_type != 'task')
+            if(task_type != 'task'){
                 getTasks(sort)
+                setTimeout(increaseMainProgress, 100)
+            }
         },
         error: function(xhr, status, error) {
             console.error('Blad AJAX:', status, error);
         }
     });
 }
+
+
+
 
 //*************** ADD SUBTASK ***************
 function addSubtask(task_id, sort){
@@ -340,4 +348,43 @@ function addSubtask(task_id, sort){
             getTasks(sort)
         }
     });
+}
+
+
+
+ //PROGRESS BAR OF ALL TASKS
+function increaseMainProgress() {
+    $.ajax({
+        url: 'get-completed-tasks/',
+        type: 'GET',
+        success: function(data) {
+            increaseProgress(data.completed_tasks, data.all_tasks);
+        }
+    });
+}
+
+function increaseProgress(completedTasks, numberOfAllTasks) { // later add id parameters for progress div etc
+    // let completedTasks = data.completed_tasks; // Pobierz z bazy ilość ukończonych tasków
+    // let numberOfAllTasks = data.all_tasks; // Pobierz z bazy ilość wszystkich tasków
+
+    let progressBar = document.getElementById("progress");
+    let percentOfCompletedTasks = document.getElementById("percentOfCompletedTasks");
+    let tasksDone = document.getElementById("tasksDone");
+    let allTasks = document.getElementById("allTasks");
+    if (tasksDone) {
+        tasksDone.innerHTML = completedTasks;
+    }
+    if(allTasks){
+        allTasks.innerHTML = numberOfAllTasks;
+    }
+    if (progressBar) {
+        let progressWidth = (200 * completedTasks / numberOfAllTasks) + "px";
+        progressBar.style.width = progressWidth;
+    }
+    if(percentOfCompletedTasks){
+        if(!isNaN(completedTasks / numberOfAllTasks))
+            percentOfCompletedTasks.innerHTML = Math.round((completedTasks / numberOfAllTasks) * 100) + "%";
+        else
+            percentOfCompletedTasks.innerHTML = "0%";
+    }
 }
