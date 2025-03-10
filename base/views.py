@@ -21,11 +21,7 @@ def home(request):
     except:
         rooms = None
 
-    context = {
-        'rooms': rooms,
-    }
-
-    return render(request, 'home.html', context)
+    return render(request, 'home.html')
 
 @login_required(login_url='login')
 def createRoom(request):
@@ -58,10 +54,13 @@ def room(request, pk):
     users = room.users.all()
     notes = room.notes
 
+    rooms = user.rooms.all()
+
     context = {
         'room': room,
         'users': users,
         'notes': notes,
+        'rooms': rooms,
     }
 
     return render(request, 'room.html', context)
@@ -121,13 +120,14 @@ def getTasks(request, pk):
             'description': task.description,
             'completed': task.completed,
             'date': formatted_date,
-            'importance': task.importance#.get_importance_display(),
+            'importance': task.importance,
+            'importance_label': task.get_importance_display(),
+            'background_color': task.background_color,
         })
 
         # subtasks_data.append(task.subtasks.all())
 
     subtasks_data = list((Subtask.objects.filter(task__room=room)).values())
-    # print(subtasks_data)
 
     return JsonResponse({'tasks': tasks_data, 'subtasks': subtasks_data})
 
@@ -135,17 +135,27 @@ def getTasks(request, pk):
 def completeTask(request, pk, task_pk, task_type):
     if task_type == 'task':
         task = Task.objects.get(id=task_pk)
+        print('task')
     elif task_type == 'subtask':
         task = Subtask.objects.get(id=task_pk)
         print('subtask')
+    
+    completed = True if request.POST.get('completed') == 'true' else False
 
-
-    # task = Task.objects.get(id=task_pk)
-    task.completed = True if request.POST.get('completed') == 'true' else False
-    print(task.completed)
+    task.completed = completed
     task.save()
 
     return JsonResponse({'success': 'Task completed successfully!'})
+
+def getCompletedTasks(request, pk):
+    room = TaskRoom.objects.get(id=pk)
+    tasks = room.tasks.filter(completed=True).count()
+    all_tasks = room.tasks.all().count()
+
+    print('click')
+
+    return JsonResponse({'completed_tasks': tasks, 'all_tasks': all_tasks})
+
 
 def removeUserFromRoom(request, pk, user_pk):
     room = TaskRoom.objects.get(id=pk)

@@ -73,10 +73,15 @@ function getTasksForSchedule(sort){
     });
 }
 
+var isEditingNote = false
+
 function editNotes(element){
-    var noteElement = element.parentElement.parentElement.querySelector('div[name="text"]').firstElementChild
-    noteElement.innerHTML = `<textarea name="note" >` + noteElement.innerHTML + `</textarea>`
-    + `<button onclick="saveNotes(this)">Save</button>`;
+    if(!isEditingNote){
+        var noteElement = element.parentElement.parentElement.querySelector('div[name="text"]').firstElementChild
+        noteElement.innerHTML = `<textarea name="note" >` + noteElement.innerHTML + `</textarea>`
+        + `<button onclick="saveNotes(this)">Save</button>`;
+        isEditingNote = true
+    }   
 }
 
 function saveNotes(element){
@@ -97,6 +102,7 @@ function saveNotes(element){
             getNotes()
         }
     })
+    isEditingNote = false
 }
 
 function getNotes(){
@@ -111,13 +117,7 @@ function getNotes(){
 
 getNotes()
 
-//**********************************************
-
-
-
-
-
-// *************** GET TASKS ***************
+// ***************** GET TASKS *****************
 function getTasks(sort){
     $.ajax({
         url: 'get-tasks/?sort=' + sort,
@@ -130,69 +130,26 @@ function getTasks(sort){
 
             var taskIteration = 0;
 
+
             //LOOP FOR EACH TASK
             data.tasks.forEach(function (task) {
                 taskIteration++
-                //*********************************
-                // HERE ARE ELEMENTS WITH THE TASKS
-                //*********************************
-                //******** START TASK DIV ********
-                // $('#tasks').append(
-                //     `<div id="taskID${task.id}" onchange='completeTask(${task.id}, "task")'>` +
-                //         '<h2 class="title">' + task.title + '</h2>' +
-                //         '<h4 class="desc">' + task.description + '</h4>' +
-                //         '<h4 class="date">' + task.date + '</h4>' +
-                //         '<h4 class="importance">' + task.importance + '</h4>' +
-                //         '<input class="checkbox" type="checkbox" id="check' + task.id + '" ><br><br>'
-                // )
-                // //******** START SUBTASKS DIV ********
-                // data.subtasks.forEach(function(subtask){
-                //     if(subtask.task_id == task.id){
-                //         $('#tasks').append(
-                //             `<div id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask")'>` +
-                //                 subtask.title +
-                //                 '<input type="checkbox" class="checkbox" id="subcheck' + subtask.id + '" >' +
-                //             '</div>'
-                //         )
-                //         document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
-                //     }
-                // })
-                // //******** END SUBTASKS DIV **********
-                // //******** START ADD SUBTASK FORM ********
-                // $('#tasks').append(
-                //     '<form method="POST" id="addSubtask' + task.id + '" onsubmit="addSubtask(' + task.id + ')">' +
-                //         '{% csrf_token %}' +
-                //         '<br><input type="text" name="title" placeholder="Title">' +
-                //         '<input type="submit" value="Add Subtask">' +
-                //     '</form>'
-                // )
-                // //******** END ADD SUBTASK FORM ********
-                // //******* END TASK DIV *******
-                // $('#tasks').append(
-                //         '<hr>' +
-                //     '</div>'
-                // );
-                // document.getElementById('check' + task.id).checked = task.completed; //SET CHECKBOX STATE FROM DATABASE
-
 
 
                 // TODO
                 // poprawic progress bar do kazdego diva
 
-                let firstLineElementLeft = `<div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">`
-                let firstLineElementRight = `<div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')"class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">`
-                 
+                let firstLine = `<div name="ExampleTask" onclick="showHideSubtasks('subtasks${task.id}')" class="flex flex-col gap-4 bg-[${task.background_color}] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">`
+
                 if(taskIteration%2){
                     var currentCol = leftCol
-                    var line = firstLineElementLeft
                 }
                 else{
                     var currentCol = rightCol
-                    var line = firstLineElementRight
                 }
 
                 //ADD TASK TO COLUMN
-                currentCol.append(line
+                currentCol.append(firstLine
                     +`
                     <div name="Task-content" class="flex flex-col m-7 ml-12">
                         <div name="tags" class="flex flex-row gap-8 text-sm">
@@ -200,7 +157,7 @@ function getTasks(sort){
                                 <img src="${timeImg}" class="h-[20px]"> ${task.date}
                             </p>
                             <p name="importance" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                <img src="${importanceImg}" class="h-[20px]"> ${task.importance}
+                                <img src="${importanceImg}" class="h-[20px]"> ${task.importance_label}
                             </p>
                             <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 <img src="${bellImg}" class="h-[20px]"> Notification - Yes
@@ -308,7 +265,15 @@ function getTasks(sort){
                 $('#tasksDone'+task.id).html(subtask_complete)
                 $('#allTasks'+task.id).html(subtask_all)
 
-                // nie zmieniac div na form bo bedzie dzialac gorzej
+                //done task
+                if(subtask_complete === subtask_all){
+                    completeTask(task.id, 'task', sort, true)
+                }
+                else{
+                    completeTask(task.id, 'task', sort, false)
+                }
+
+                //nie zmieniac div na form bo bedzie dzialac gorzej
                 //ADD SUBTASK FORM TO TASK
                 subtaskForm.innerHTML += `
                     <div name="addSubtask" class="w-fit mt-1" id="addSubtask` + task.id + `">
@@ -321,27 +286,40 @@ function getTasks(sort){
         }
     });
 }
+
+
+
 getTasks('date')
+increaseMainProgress()
+
+
 
 
 //*************** SAVE COMPLETE TASK ***************
 //********* task_type: task or subtask *************
-function completeTask(id, task_type, sort){
+function completeTask(id, task_type, sort, task_complete=false){
     task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
-    // console.log(task.find('.checkbox'))
-    // console.log(task.find('.checkbox').prop('checked'))
-    console.log(task.find('.checkboxState').prop('checked'))
+
+    if(task_type == 'task'){
+        var completed = task_complete
+    }
+    else
+        var completed = task.find('.checkboxState').prop('checked')
+
     $.ajax({
         url: 'complete-task/' + id + '/' + task_type + '/',
         type: 'POST',
         data: {
-            completed: task.find('.checkboxState').prop('checked')
+            completed: completed
         },
         headers: {
             'X-CSRFToken': csrf_token,
         },
         success: function(response) {
-            getTasks(sort)
+            if(task_type != 'task'){
+                getTasks(sort)
+                setTimeout(increaseMainProgress, 100)
+            }
         },
         error: function(xhr, status, error) {
             console.error('Blad AJAX:', status, error);
@@ -349,9 +327,11 @@ function completeTask(id, task_type, sort){
     });
 }
 
+
+
+
 //*************** ADD SUBTASK ***************
 function addSubtask(task_id, sort){
-    console.log(csrf_token)
     var title = document.getElementById('addSubtask' + task_id).querySelector('input[name="title"]').value
     $.ajax({
         url: 'add-subtask/',
@@ -368,4 +348,43 @@ function addSubtask(task_id, sort){
             getTasks(sort)
         }
     });
+}
+
+
+
+ //PROGRESS BAR OF ALL TASKS
+function increaseMainProgress() {
+    $.ajax({
+        url: 'get-completed-tasks/',
+        type: 'GET',
+        success: function(data) {
+            increaseProgress(data.completed_tasks, data.all_tasks);
+        }
+    });
+}
+
+function increaseProgress(completedTasks, numberOfAllTasks) { // later add id parameters for progress div etc
+    // let completedTasks = data.completed_tasks; // Pobierz z bazy ilość ukończonych tasków
+    // let numberOfAllTasks = data.all_tasks; // Pobierz z bazy ilość wszystkich tasków
+
+    let progressBar = document.getElementById("progress");
+    let percentOfCompletedTasks = document.getElementById("percentOfCompletedTasks");
+    let tasksDone = document.getElementById("tasksDone");
+    let allTasks = document.getElementById("allTasks");
+    if (tasksDone) {
+        tasksDone.innerHTML = completedTasks;
+    }
+    if(allTasks){
+        allTasks.innerHTML = numberOfAllTasks;
+    }
+    if (progressBar) {
+        let progressWidth = (200 * completedTasks / numberOfAllTasks) + "px";
+        progressBar.style.width = progressWidth;
+    }
+    if(percentOfCompletedTasks){
+        if(!isNaN(completedTasks / numberOfAllTasks))
+            percentOfCompletedTasks.innerHTML = Math.round((completedTasks / numberOfAllTasks) * 100) + "%";
+        else
+            percentOfCompletedTasks.innerHTML = "0%";
+    }
 }

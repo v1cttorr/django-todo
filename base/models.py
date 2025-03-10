@@ -36,6 +36,7 @@ class Task(models.Model):
     date = models.DateTimeField()
     importance = models.CharField(max_length=30, choices=importance_choices, default='trivial')
     isMarked = models.BooleanField(default=False)
+    background_color = models.CharField(max_length=20, default='#FFE68E')
 
     def __str__(self):
         return self.title

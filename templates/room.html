@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/room.css' %}">
+    <link rel="stylesheet" href="{% static 'css/room.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -199,7 +199,7 @@
     </script>
 
     <script src="{% static 'js/getTasks.js' %}"></script>
-
+    
     <div name="main-container" class="flex flex-col m-5">
         <div name="navigationBar" class="w-full bg-black h-14"><!--There will be date selector, settings, profile pic, etc - Look at figma-->
         </div>
@@ -249,32 +249,7 @@
                                 <p class="font-normal text-sm text-[#09151B] drop-shadow-lg" style="filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));"><span style="filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));" id="tasksDone">0</span>/<span id="allTasks">0</span> tasks are done!</p>
                             </div>
                             <script>
-                                document.addEventListener("DOMContentLoaded", function () {
-                                    let completedTasks = 6; // Pobierz z bazy ilość ukończonych tasków
-                                    let numberOfAllTasks = 12; // Pobierz z bazy ilość wszystkich tasków
-                                    
-                                    function increaseProgress() {
-                                        let progressBar = document.getElementById("progress");
-                                        let percentOfCompletedTasks = document.getElementById("percentOfCompletedTasks");
-                                        let tasksDone = document.getElementById("tasksDone");
-                                        let allTasks = document.getElementById("allTasks");
-                                        if (tasksDone) {
-                                            tasksDone.innerHTML = completedTasks;
-                                        }
-                                        if(allTasks){
-                                            allTasks.innerHTML = numberOfAllTasks;
-                                        }
-                                        if (progressBar) {
-                                            let progressWidth = (200 * completedTasks / numberOfAllTasks) + "px";
-                                            progressBar.style.width = progressWidth;
-                                        }
-                                        if(percentOfCompletedTasks){
-                                            percentOfCompletedTasks.innerHTML = Math.round((completedTasks / numberOfAllTasks) * 100) + "%";
-                                        }
-                                    }
-                            
-                                    increaseProgress();
-                                });
+                                
                             </script>
                             
                         </div>
@@ -420,13 +395,15 @@
                                 </button>
                             </div>
                             <div name="lists" class="m-4">
-                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List one</a>
-                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List two</a>
-                                <a href="#" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">List three</a>
+                                {% for room in rooms %}
+                                    <a href="/room/{{room.pk}}/" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">{{room.title}}</a>
+                                {% endfor %}
+                                <a href="/create-room/" class="text-white border-2 ml-2 border-[#E4EAEE] bg-[#09151B] px-4 py-3 text-base font-medium rounded-2xl shadow-[3px_4px_0px_#09151B]">+</a>
                             </div>
                         </div>
                         <div name="sort" class="flex flex-row items-center gap-5 mr-5">
                             <p>Sort by:</p>
+                            <!-- TODO make it bold -->
                             <button onclick="getTasks('date')">Time</button>
                             <button onclick="getTasks('importance')">Importance</button>
                         </div>
@@ -526,7 +503,7 @@
                         <!-- </div> -->
                     </div>
                     <div name="rightColumn" id="rightColumn" class="flex flex-col gap-4 w-[48%]">
-                        <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                        <!-- <div name="ExampleTask" class="flex flex-col gap-4 bg-[#90CDFF] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                             <div name="Task-content" class="flex flex-col m-7 ml-12">
                                 <div name="tags" class="flex flex-row gap-8 text-sm">
                                     <p name="time" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
@@ -566,7 +543,7 @@
                                     <img src="{% static 'img/users.png' %}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 </div>
                             </div>
-                        </div> 
+                        </div>  -->
                     </div>
                 </div>
             </div>
