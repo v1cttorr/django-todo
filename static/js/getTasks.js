@@ -369,3 +369,107 @@ function addSubtask(task_id, sort){
         }
     });
 }
+    //Edycja tasków
+    function editText(element) {
+        const textElement = element.querySelector('p');
+        const currentText = textElement.innerText;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentText;
+        input.className = textElement.className;
+        
+        input.addEventListener('blur', function () {
+            textElement.innerText = input.value;
+            element.replaceChild(textElement, input);
+        });
+
+        element.replaceChild(input, textElement);
+        input.focus();
+    }
+
+    function editTime(element) {
+        const span = element.querySelector('span');
+        const input = document.createElement('input');
+        input.type = 'time';
+        input.value = '11:00';
+        
+        input.addEventListener('blur', function () {
+            span.innerText = input.value;
+            element.replaceChild(span, input);
+        });
+
+        element.replaceChild(input, span);
+        input.focus();
+    }
+
+    function editImportance(element) {
+        const span = element.querySelector('span');
+        const select = document.createElement('select');
+        const options = ['Trivial', 'Easy', 'Medium', 'Important'];
+        
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.innerText = option;
+            if (span.innerText === option) opt.selected = true;
+            select.appendChild(opt);
+        });
+        
+        select.addEventListener('blur', function () {
+            span.innerText = select.value;
+            element.replaceChild(span, select);
+        });
+
+        element.replaceChild(select, span);
+        select.focus();
+    }
+
+    function editNotification(element) {
+        const span = element.querySelector('span');
+        const select = document.createElement('select');
+        const options = ['Yes', 'No'];
+        
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.innerText = option;
+            if (span.innerText.includes(option)) opt.selected = true;
+            select.appendChild(opt);
+        });
+        
+        select.addEventListener('blur', function () {
+            span.innerText = 'Notification - ' + select.value;
+            element.replaceChild(span, select);
+        });
+
+        element.replaceChild(select, span);
+        select.focus();
+    }
+
+    function addTask() {
+        const taskContainer = document.getElementById('taskContainer');
+        const newTask = document.createElement('div');
+        newTask.className = "flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none p-4";
+        newTask.innerHTML = `
+            <div name="Task-content" class="flex flex-col">
+                <div name="tags" class="flex flex-row gap-8 text-sm">
+                    <p name="time" class="flex flex-row items-center gap-1" onclick="editTime(this)">
+                        <img src="{% static 'img/clock.png' %}" class="h-[20px]"> <span>12:00 PM</span>
+                    </p>
+                    <p name="importance" class="flex flex-row items-center gap-1" onclick="editImportance(this)">
+                        <img src="{% static 'img/!.png' %}" class="h-[20px]"> <span>Medium</span>
+                    </p>
+                    <p name="notification" class="flex flex-row items-center gap-1" onclick="editNotification(this)">
+                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> <span>Notification - No</span>
+                    </p>
+                </div>
+                <div name="title" class="mt-4" onclick="editText(this)">
+                    <p class="font-semibold text-[20px]">New Task</p>
+                </div>
+                <div name="description" class="mt-2" onclick="editText(this)">
+                    <p name="description-text" class="text-[12px]">Task description...</p>
+                </div>
+            </div>
+        `;
+        taskContainer.appendChild(newTask);
+    }
