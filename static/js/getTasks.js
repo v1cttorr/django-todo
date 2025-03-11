@@ -123,7 +123,8 @@ function getTasks(sort){
         url: 'get-tasks/?sort=' + sort,
         type: 'GET',
         success: function(data) {
-            var leftCol =  $('#leftColumn')
+            var leftCol =  $('#leftColumnTasks')
+            // var leftCol =  $('#leftColumn')
             var rightCol =  $('#rightColumn')
             leftCol.html('');
             rightCol.html('');
@@ -318,7 +319,7 @@ function completeTask(id, task_type, sort, task_complete=false){
         success: function(response) {
             if(task_type != 'task'){
                 getTasks(sort)
-                setTimeout(increaseMainProgress, 100)
+                setTimeout(increaseMainProgress, 250)
             }
         },
         error: function(xhr, status, error) {
@@ -328,14 +329,16 @@ function completeTask(id, task_type, sort, task_complete=false){
 }
 
 
-
-
 //*************** ADD SUBTASK ***************
 function addSubtask(task_id, sort){
     var title = document.getElementById('addSubtask' + task_id).querySelector('input[name="title"]').value
     $.ajax({
         url: 'add-subtask/',
         type: 'POST',
+        contentType: 'application/x-www-form-urlencoded',
+        headers: {
+            'X-CSRFToken': csrf_token,
+        },
         contentType: 'application/x-www-form-urlencoded',
         data: {
             title: title,
@@ -349,110 +352,88 @@ function addSubtask(task_id, sort){
         }
     });
 }
-    //Edycja tasków
-    function editText(element) {
-        const textElement = element.querySelector('p');
-        const currentText = textElement.innerText;
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = currentText;
-        input.className = textElement.className;
-        
-        input.addEventListener('blur', function () {
-            textElement.innerText = input.value;
-            element.replaceChild(textElement, input);
-        });
 
-        element.replaceChild(input, textElement);
-        input.focus();
-    }
+//Edycja tasków
+function editText(element) {
+    const textElement = element.querySelector('p');
+    const currentText = textElement.innerText;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentText;
+    input.className = textElement.className;
+    
+    input.addEventListener('blur', function () {
+        textElement.innerText = input.value;
+        element.replaceChild(textElement, input);
+    });
 
-    function editTime(element) {
-        const span = element.querySelector('span');
-        const input = document.createElement('input');
-        input.type = 'time';
-        input.value = '11:00';
-        
-        input.addEventListener('blur', function () {
-            span.innerText = input.value;
-            element.replaceChild(span, input);
-        });
+    element.replaceChild(input, textElement);
+    input.focus();
+}
 
-        element.replaceChild(input, span);
-        input.focus();
-    }
+function editTime(element) {
+    const span = element.querySelector('span');
+    const input = document.createElement('input');
+    input.type = 'time';
+    input.value = '12:00';
+    
+    input.addEventListener('blur', function () {
+        span.innerText = input.value;
+        element.replaceChild(span, input);
+    });
 
-    function editImportance(element) {
-        const span = element.querySelector('span');
-        const select = document.createElement('select');
-        const options = ['Trivial', 'Easy', 'Medium', 'Important'];
-        
-        options.forEach(option => {
-            const opt = document.createElement('option');
-            opt.value = option;
-            opt.innerText = option;
-            if (span.innerText === option) opt.selected = true;
-            select.appendChild(opt);
-        });
-        
-        select.addEventListener('blur', function () {
-            span.innerText = select.value;
-            element.replaceChild(span, select);
-        });
+    element.replaceChild(input, span);
+    input.focus();
+}
 
-        element.replaceChild(select, span);
-        select.focus();
-    }
+function editImportance(element) {
+    const span = element.querySelector('span');
+    const select = document.createElement('select');
+    const options = ['Trivial', 'Important', 'High Priority', 'Very Important'];
+    
+    options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.innerText = option;
+        if (span.innerText === option) opt.selected = true;
+        select.appendChild(opt);
+    });
+    
+    select.addEventListener('blur', function () {
+        span.innerText = select.value;
+        element.replaceChild(span, select);
+    });
 
-    function editNotification(element) {
-        const span = element.querySelector('span');
-        const select = document.createElement('select');
-        const options = ['Yes', 'No'];
-        
-        options.forEach(option => {
-            const opt = document.createElement('option');
-            opt.value = option;
-            opt.innerText = option;
-            if (span.innerText.includes(option)) opt.selected = true;
-            select.appendChild(opt);
-        });
-        
-        select.addEventListener('blur', function () {
-            span.innerText = 'Notification - ' + select.value;
-            element.replaceChild(span, select);
-        });
+    element.replaceChild(select, span);
+    select.focus();
+}
 
-        element.replaceChild(select, span);
-        select.focus();
-    }
+function editNotification(element) {
+    const span = element.querySelector('span');
+    const select = document.createElement('select');
+    const options = ['Yes', 'No'];
+    
+    options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.innerText = option;
+        if (span.innerText.includes(option)) opt.selected = true;
+        select.appendChild(opt);
+    });
+    
+    select.addEventListener('blur', function () {
+        span.innerText = 'Notification - ' + select.value;
+        element.replaceChild(span, select);
+    });
 
-    function addTask() {
-        const taskContainer = document.getElementById('taskContainer');
-        const newTask = document.createElement('div');
-        newTask.className = "flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none p-4";
-        newTask.innerHTML = `
-            <div name="Task-content" class="flex flex-col">
-                <div name="tags" class="flex flex-row gap-8 text-sm">
-                    <p name="time" class="flex flex-row items-center gap-1" onclick="editTime(this)">
-                        <img src="{% static 'img/clock.png' %}" class="h-[20px]"> <span>12:00 PM</span>
-                    </p>
-                    <p name="importance" class="flex flex-row items-center gap-1" onclick="editImportance(this)">
-                        <img src="{% static 'img/!.png' %}" class="h-[20px]"> <span>Medium</span>
-                    </p>
-                    <p name="notification" class="flex flex-row items-center gap-1" onclick="editNotification(this)">
-                        <img src="{% static 'img/bell.png' %}" class="h-[20px]"> <span>Notification - No</span>
-                    </p>
-                </div>
-                <div name="title" class="mt-4" onclick="editText(this)">
-                    <p class="font-semibold text-[20px]">New Task</p>
-                </div>
-                <div name="description" class="mt-2" onclick="editText(this)">
-                    <p name="description-text" class="text-[12px]">Task description...</p>
-                </div>
-            </div>
-        `;
-        taskContainer.appendChild(newTask);
-    }
+    element.replaceChild(select, span);
+    select.focus();
+}
+
+function addTask() {
+    var taskElement = document.getElementById('addTaskElement');
+    taskElement.style.display = 'block';
+}
 
 
 
@@ -491,4 +472,48 @@ function increaseProgress(completedTasks, numberOfAllTasks) { // later add id pa
         else
             percentOfCompletedTasks.innerHTML = "0%";
     }
+}
+
+
+//*************** SEND TASKS ***************
+// $('#addTask').on('submit', function(e) {
+//     // e.preventDefault();
+
+//     var title = $('input[name="title"]').val();
+//     var description = $('input[name="description"]').val();
+//     var date = $('input[name="date"]').val();
+//     var importance = $('#importance').val();
+//     console.log("aaaaaaaaaaaaa");
+
+//     $.ajax({
+//         url: 'add-task/',
+//         type: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         data: {
+//             title: title,
+//             description: description,
+//             date: date,
+//             importance: importance
+//         },
+//         success: function(response) {
+//             getTasks('date')
+//         }
+//     });
+// });
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

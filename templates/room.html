@@ -421,6 +421,63 @@
                 </script>
                 <div name="MainTasksContainer" id="MainTasksContainer" class="flex flex-row gap-5 w-full mt-3"> <!--Div na taski-->
                     <div name="leftColumn" id="leftColumn" class="flex flex-col gap-4 w-[48%]">
+                        
+                        <form method="POST" id="addTask">
+                            {% csrf_token %}
+                            <div id="addTaskElement" style="display: none;" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none p-4">
+                                <div name="Task-content" class="flex flex-col">
+                                    <div name="tags" class="flex flex-row gap-8 text-sm">
+                                        <p name="time" class="flex flex-row items-center gap-1" onclick="editTime(this)">
+                                            <img src="{% static 'img/clock.png' %}" class="h-[20px]"> <span>12:00 PM</span>
+                                        </p>
+                                        <p id="importanceSelect" name="importance" class="flex flex-row items-center gap-1" onclick="editImportance(this)">
+                                            <img src="{% static 'img/!.png' %}" class="h-[20px]"> <span>Medium</span>
+                                        </p> 
+                                        <p name="notification" class="flex flex-row items-center gap-1" onclick="editNotification(this)">
+                                            <img src="{% static 'img/bell.png' %}" class="h-[20px]"> <span>Notification - No</span>
+                                        </p>
+                                    </div> 
+                                    <div name="title" class="mt-4" onclick="editText(this)">
+                                        <p id="titleTask" class="font-semibold text-[20px]">New Task</p>
+                                    </div> 
+                                    <div name="description" class="mt-2" onclick="editText(this)"> 
+                                        <p name="description-text" id="descriptiontext" class="text-[12px]">Task description...</p> 
+                                    </div>
+                                </div>
+                                <input type="submit" value="Add Task" class="rounded-xl border-2 border-[#09151B] p-1 pl-3 pr-3">
+                            </div>
+                        </form>
+
+                        <script>
+                            $('#addTask').on('submit', function(e) {
+                            e.preventDefault();
+
+                            var title = document.getElementById('titleTask').innerHTML;
+                            var description = document.getElementById('descriptiontext').innerHTML;
+                            //TODO get date
+                            var date = '2022-10-10 12:00:00';
+                            var importance = document.getElementById('importanceSelect').children[1].innerHTML;
+
+                            $.ajax({
+                                url: 'add-task/',
+                                type: 'POST',
+                                data: {
+                                    title: title,
+                                    description: description,
+                                    date: date,
+                                    importance: importance
+                                },
+                                headers: {
+                                    'X-CSRFToken': '{{csrf_token}}'
+                                },
+                                success: function(response) {
+                                    getTasks('date')
+                                }
+                            });
+                        });
+                        </script>
+
+                        <div id="leftColumnTasks" class="flex flex-col gap-4"></div>
                         <!-- <div name="ExampleTask" onclick="showHideSubtasks()" class="flex flex-col gap-4 bg-[#FFE68E] rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.25)] cursor-pointer select-none">
                             <div name="Task-content" class="flex flex-col m-7 ml-12">
                                 <div name="tags" class="flex flex-row gap-8 text-sm">
