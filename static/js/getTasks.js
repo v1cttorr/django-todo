@@ -119,6 +119,7 @@ getNotes()
 
 // ***************** GET TASKS *****************
 function getTasks(sort){
+    sort_by = sort
     $.ajax({
         url: 'get-tasks/?sort=' + sort,
         type: 'GET',
@@ -175,11 +176,11 @@ function getTasks(sort){
                         <div name="task-progress">
                             <div name="currentProgress">
                                 <p class="font-normal text-sm mt-2 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                    Current Progress - <span id="percentOfCompletedTasks">25%</span>
+                                    Current Progress - <span id="percentOfCompletedTasks${task.id}">25%</span>
                                 </p>
                             </div>
                             <div name="progressBar" class="relative w-[300px] h-[15px] rounded-[5px] bg-[#CACACA] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                <div id="progress" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
+                                <div id="progress${task.id}" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
                             </div>
                             <div name="completedTasks" class="mt-1.5">
                                 <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
@@ -283,6 +284,22 @@ function getTasks(sort){
                         <button onclick="addSubtask(${task.id}, '${sort.toString()}')">Add Subtask</button>
                     </div>
                 `
+                
+                let progressBar = document.getElementById("progress" + task.id)
+                let progressWidth = (300 * subtask_complete / subtask_all) + "px";
+                progressBar.style.width = progressWidth;
+                let percentOfCompletedTasks = document.getElementById("percentOfCompletedTasks"+task.id);
+                
+                if(subtask_all == 0){
+                    progressBar.style.width = "0px";
+                    //CHECKBOX FOR TASKS WITHOUT SUBTASKS
+                }
+                if(percentOfCompletedTasks){
+                    if(!isNaN(subtask_complete / subtask_all))
+                        percentOfCompletedTasks.innerHTML = Math.round((subtask_complete / subtask_all) * 100) + "%";
+                    else
+                        percentOfCompletedTasks.innerHTML = "0%";
+                }
             })
         }
     });
@@ -431,7 +448,7 @@ function editNotification(element) {
 }
 
 function addTask() {
-    var taskElement = document.getElementById('addTaskElement');
+    var taskElement = document.getElementById('addTask');
     taskElement.style.display = 'block';
 }
 

@@ -100,6 +100,7 @@ def getTasks(request, pk):
     if sort == 'null':
         sort = 'date'
 
+
     custom_order = Case(
         When(importance='trivial', then=Value(4)),
         When(importance='important', then=Value(3)),
