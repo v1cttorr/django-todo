@@ -182,7 +182,10 @@ function getTasks(sort){
                             <div name="progressBar" class="relative w-[300px] h-[15px] rounded-[5px] bg-[#CACACA] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 <div id="progress${task.id}" class="bg-black w-[50px] h-[15px] rounded-[5px]"></div>
                             </div>
-                            <div name="completedTasks" class="mt-1.5">
+
+                            <input type="checkbox" class="hidden peer checkBoxState" id="taskID${task.id}" onchange='completeTask(${task.id}, "task", "${sort}")' />
+                            
+                            <div name="completedTasks" class="mt-1.5" id="completedTasks${task.id}">
                                 <p class="font-normal text-sm text-[#09151B] drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                     <span id="tasksDone${task.id}">5</span>/<span id="allTasks${task.id}">20</span> tasks are done!
                                 </p>
@@ -263,17 +266,16 @@ function getTasks(sort){
                     }
                 })
 
-
-                $('#tasksDone'+task.id).html(subtask_complete)
-                $('#allTasks'+task.id).html(subtask_all)
-
-                //done task
-                if(subtask_complete === subtask_all){
-                    completeTask(task.id, 'task', sort, true)
+                if(subtask_all != 0){
+                    $('#completedTasks'+task.id).show()
+                    $('#tasksDone'+task.id).html(subtask_complete)
+                    $('#allTasks'+task.id).html(subtask_all)
                 }
                 else{
-                    completeTask(task.id, 'task', sort, false)
+                    $('#completedTasks'+task.id).hide()
                 }
+
+                
 
                 //nie zmieniac div na form bo bedzie dzialac gorzej
                 //ADD SUBTASK FORM TO TASK
@@ -293,12 +295,26 @@ function getTasks(sort){
                 if(subtask_all == 0){
                     progressBar.style.width = "0px";
                     //CHECKBOX FOR TASKS WITHOUT SUBTASKS
+                    var taskCheckbox = document.getElementById('taskID' + task.id)
+                    taskCheckbox.classList.remove('hidden')
+                    taskCheckbox.classList.add('onlyTask') //task without subtasks
+                    if(task.completed){
+                        taskCheckbox.checked = true
+                    }
                 }
                 if(percentOfCompletedTasks){
                     if(!isNaN(subtask_complete / subtask_all))
                         percentOfCompletedTasks.innerHTML = Math.round((subtask_complete / subtask_all) * 100) + "%";
                     else
                         percentOfCompletedTasks.innerHTML = "0%";
+                }
+
+                //done task
+                if(subtask_complete === subtask_all && subtask_all !== 0){
+                    completeTask(task.id, 'task', sort, true)
+                }
+                else{
+                    completeTask(task.id, 'task', sort, false)
                 }
             })
         }
@@ -320,6 +336,22 @@ function completeTask(id, task_type, sort, task_complete=false){
 
     if(task_type == 'task'){
         var completed = task_complete
+        var completedElement = document.getElementById('taskID' + id)
+        
+        if (completedElement.classList.contains('onlyTask')){    
+            var completed = completedElement.checked
+            let progressBar = document.getElementById("progress" + id)
+            let percentOfCompletedTasks = document.getElementById("percentOfCompletedTasks"+id);
+            
+            if(completed){
+                progressBar.style.width = "300px";
+                percentOfCompletedTasks.innerHTML = "100%";
+            }
+            else{
+                progressBar.style.width = "0px";
+                percentOfCompletedTasks.innerHTML = "0%";
+            }
+        }
     }
     else
         var completed = task.find('.checkboxState').prop('checked')
@@ -336,8 +368,8 @@ function completeTask(id, task_type, sort, task_complete=false){
         success: function(response) {
             if(task_type != 'task'){
                 getTasks(sort)
-                setTimeout(increaseMainProgress, 250)
             }
+            setTimeout(increaseMainProgress, 250)
         },
         error: function(xhr, status, error) {
             console.error('Blad AJAX:', status, error);
