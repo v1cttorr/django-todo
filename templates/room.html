@@ -6,196 +6,13 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Room <br> <br>
-    Invite code: {{room.invite_code}} <br> <br>
-
-    {% if room.admin.user == request.user and users|length > 1 %}
-        
-        Zarzadzaj użytkownikami: <br>
-        {% for user in users %}
-            {% if not request.user.username == user.user.username %}
-                <div>{{user.user.username}} <button><a href="remove/{{user.pk}}/">USUŃ</a></button></div><br>
-            {% endif %}
-        {% endfor %}
-    
-    {% endif %}
-
-    <form method="POST" id="addTask">
-        {% csrf_token %}
-        <input type="text" name="title" placeholder="Title"> <br>
-        <input type="text" name="description" placeholder="Description"> <br>
-        <input type="datetime-local" name="date"> <br>
-        <select name="importance" id="importance">
-            <option value="trivial">Trivial</option>
-            <option value="important">Important</option>
-            <option value="high_priority">High Priority</option>
-            <option value="very_important">Very Important</option>
-        </select>
-        <input type="submit" value="Add Task">
-    </form>
-
-
-
-
-    <h3>Sort by:</h3>
-    <a href="?sort=date">Date</a>
-    <a href="?sort=importance">Importance</a>
-
-    <script>
-        const sort = new URLSearchParams(window.location.search).get('sort')
-        if(sort == null || sort == ''){
-            window.location.search = '?sort=date'
-        }
-
-
-        //*************** SEND TASKS ***************
-        $('#addTask').on('submit', function(e) {
-            e.preventDefault();
-
-            var title = $('input[name="title"]').val();
-            var description = $('input[name="description"]').val();
-            var date = $('input[name="date"]').val();
-            var importance = $('#importance').val();
-
-            $.ajax({
-                url: 'add-task/',
-                type: 'POST',
-                data: {
-                    title: title,
-                    description: description,
-                    date: date,
-                    importance: importance
-                },
-                headers: {
-                    'X-CSRFToken': '{{csrf_token}}'
-                },
-                success: function(response) {
-                    getTasks()
-                }
-            });
-        });
-
-
-        //*************** ADD SUBTASK ***************
-        function addSubtask(task_id){
-            event.preventDefault();
-            var form = event.target;
-            var title = form.querySelector('input[name="title"]').value;
-
-            $.ajax({
-                url: 'add-subtask/',
-                type: 'POST',
-                data: {
-                    title: title,
-                    task_id: task_id
-                },
-                headers: {
-                    'X-CSRFToken': '{{csrf_token}}'
-                },
-                success: function(response) {
-                    getTasks()
-                }
-            });
-        }
-
-
-        //*************** GET TASKS ***************
-        function getTasks(){
-            $.ajax({
-                url: 'get-tasks/?sort=' + sort,
-                type: 'GET',
-                success: function(data) {
-                    $('#tasks').html('');
-                    data.tasks.forEach(function (task) {
-                        //*********************************
-                        // HERE ARE ELEMENTS WITH THE TASKS
-                        //*********************************
-
-                        //******** START TASK DIV ********
-                        $('#tasks').append(
-                            `<div id="taskID${task.id}" onchange='completeTask(${task.id}, "task")'>` +
-                                '<h2 class="title">' + task.title + '</h2>' +
-                                '<h4 class="desc">' + task.description + '</h4>' +
-                                '<h4 class="date">' + task.date + '</h4>' +
-                                '<h4 class="importance">' + task.importance + '</h4>' +
-                                '<input class="checkbox" type="checkbox" id="check' + task.id + '" ><br><br>'
-                        )
-
-                        //******** START SUBTASKS DIV ********
-                        data.subtasks.forEach(function(subtask){
-                            if(subtask.task_id == task.id){
-                                $('#tasks').append(
-                                    `<div id="subtaskID${subtask.id}" onchange='completeTask(${subtask.id}, "subtask")'>` +
-                                        subtask.title +
-                                        '<input type="checkbox" class="checkbox" id="subcheck' + subtask.id + '" >' +
-                                    '</div>'
-                                )
-                                document.getElementById('subcheck' + subtask.id).checked = subtask.completed; //SET CHECKBOX STATE FROM DATABASE
-                            }
-                        })
-                        //******** END SUBTASKS DIV **********
-
-
-                        //******** START ADD SUBTASK FORM ********
-                        $('#tasks').append(
-                            '<form method="POST" id="addSubtask' + task.id + '" onsubmit="addSubtask(' + task.id + ')">' +
-                                '{% csrf_token %}' +
-                                '<br><input type="text" name="title" placeholder="Title">' +
-                                '<input type="submit" value="Add Subtask">' +
-                            '</form>'
-                        )
-                        //******** END ADD SUBTASK FORM ********
-
-
-                        //******* END TASK DIV *******
-                        $('#tasks').append(
-                                '<hr>' +
-                            '</div>'
-                        );
-                        document.getElementById('check' + task.id).checked = task.completed; //SET CHECKBOX STATE FROM DATABASE
-                    })
-                }
-            });
-        }
-        getTasks()
-
-        //*************** SAVE COMPLETE TASK ***************
-        //********* task_type: task or subtask *************
-        function completeTask(id, task_type){
-            task = task_type == 'task' ? $('#taskID' + id) : $('#subtaskID' + id)
-            // console.log(task.find('.checkbox'))
-            // console.log(task.find('.checkbox').prop('checked'))
-            $.ajax({
-                url: 'complete-task/' + id + '/' + task_type + '/',
-                type: 'POST',
-                data: {
-                    completed: task.find('.checkbox').prop('checked')
-                },
-                headers: {
-                    'X-CSRFToken': '{{csrf_token}}'
-                },
-                success: function(response) {
-                    getTasks()
-                },
-                error: function(xhr, status, error) {
-                    console.error('Blad AJAX:', status, error);
-                }
-            });
-        }
-    </script>
-
-    <br> <br> -->
-
-    <!-- ************** TASKS DIV **************** -->
-    <!--<div id="tasks"></div>-->
     <script>
         var editImage = "{% static 'img/edit.png' %}";
         var csrf_token = '{{csrf_token}}'
         var timeImg = "{% static 'img/clock.png' %}"
         var importanceImg = "{% static 'img/star.png' %}"
         var bellImg = "{% static 'img/bell.png' %}"
-        var usersImg = "{% static 'img/users.png' %}"
-
+        var deleteImg = "{% static 'img/delete.png' %}"
     </script>
 
     <script src="{% static 'js/getTasks.js' %}"></script>
@@ -385,7 +202,7 @@
                     </script>
                 </div>
             </div>  
-            <div name="right-column" class="flex flex-col gap-2 ml-4 w-full"> <!--Prawa kolumna z  paskiem wyboru listy, przyciskiem  dodawania taska oraz sortowania-->
+            <div name="right-column" class="flex flex-col gap-2 ml-4 w-full"> <!--Right column with list selection bar, add task button, and sorting-->
                 <div name="buttons"  class="flex flex-row w-full bg-[#F1F9FE] rounded-lg border-[2px] border-[#ced7dcbb] shadow-[3px_3px_0px_#CAD1D6] drop-shadow-md">
                     <div name="buttons-content" class="flex flex-row justify-between w-full m-3 items-center">
                         <div class="flex flex-row gap-2">
@@ -531,10 +348,6 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div name="people" class="flex flex-row mt-3">
-                                    <img src="{% static 'img/users.png' %}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                                </div>
-
                                 <div id="subtasks">
                                     <script>
                                         var subtask = document.getElementById("subtasks");
@@ -613,9 +426,6 @@
                                             <span id="tasksDone">5</span>/<span id="allTasks">20</span> tasks are done!
                                         </p>
                                     </div>
-                                </div>
-                                <div name="people" class="flex flex-row mt-3">
-                                    <img src="{% static 'img/users.png' %}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 </div>
                             </div>
                         </div>  -->

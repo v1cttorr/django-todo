@@ -22,7 +22,7 @@ class TaskRoom(models.Model):
         return self.tasks.all()
     
 class Task(models.Model):
-    importance_choices = [
+    IMPORTANCE_CHOICES = [
         ('trivial', 'Trivial'),
         ('important', 'Important'),
         ('high_priority', 'High Priority'),
@@ -34,21 +34,27 @@ class Task(models.Model):
     completed = models.BooleanField(default=False)
     room = models.ForeignKey(TaskRoom, on_delete=models.CASCADE, related_name='tasks')
     date = models.DateTimeField()
-    importance = models.CharField(max_length=30, choices=importance_choices, default='trivial')
-    isMarked = models.BooleanField(default=False)
+    importance = models.CharField(max_length=30, choices=IMPORTANCE_CHOICES, default='trivial')
+    is_marked = models.BooleanField(default=False)
     background_color = models.CharField(max_length=20, default='#FFE68E')
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None  # Check if this is a new Task
+        super().save(*args, **kwargs)  # Save Task first
+
+        if is_new:  # If it's a new Task, create a Subtask
+            Subtask.objects.create(task=self, title=self.title)
 
     def __str__(self):
         return self.title
-    
+
 class Subtask(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, blank=True)
     completed = models.BooleanField(default=False)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
 
     def __str__(self):
         return self.title
-    
 
 class Notes(models.Model):
     # room = models.ForeignKey(TaskRoom, on_delete=models.CASCADE, related_name='notes')

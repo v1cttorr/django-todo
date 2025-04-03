@@ -200,3 +200,10 @@ def saveNotes(request, pk):
     room.notes.text = notes
     room.notes.save()
     return JsonResponse({'success': 'Notes saved successfully!'})
+
+
+@login_required(login_url='login')
+def deleteTask(request, task_pk):
+    task = Task.objects.get(id=task_pk)
+    task.delete()
+    return redirect(request.META.get('HTTP_REFERER', f'/room/{task.room.id}/'))

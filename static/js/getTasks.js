@@ -164,6 +164,9 @@ function getTasks(sort){
                             <p name="notification" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                                 <img src="${bellImg}" class="h-[20px]"> Notification - Yes
                             </p>
+                            <p name="delete" class="flex flex-row items-center gap-1 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
+                                <a href="/room/delete/${task.id}" onclick="return"><img src="${deleteImg}" class="h-[20px]"></a>
+                            </p>
                         </div>
                         <div name="title" class="mt-4 drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                             <p class="font-semibold text-[20px]">${task.title}</p>
@@ -190,9 +193,6 @@ function getTasks(sort){
                                     <span id="tasksDone${task.id}">5</span>/<span id="allTasks${task.id}">20</span> tasks are done!
                                 </p>
                             </div>
-                        </div>
-                        <div name="people" class="flex flex-row mt-3">
-                            <img src="${usersImg}" class="drop-shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
                         </div>
                         <div id="subtasks${task.id}">
                             <script>
@@ -523,34 +523,6 @@ function increaseProgress(completedTasks, numberOfAllTasks) { // later add id pa
     }
 }
 
-
-//*************** SEND TASKS ***************
-// $('#addTask').on('submit', function(e) {
-//     // e.preventDefault();
-
-//     var title = $('input[name="title"]').val();
-//     var description = $('input[name="description"]').val();
-//     var date = $('input[name="date"]').val();
-//     var importance = $('#importance').val();
-//     console.log("aaaaaaaaaaaaa");
-
-//     $.ajax({
-//         url: 'add-task/',
-//         type: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         data: {
-//             title: title,
-//             description: description,
-//             date: date,
-//             importance: importance
-//         },
-//         success: function(response) {
-//             getTasks('date')
-//         }
-//     });
-// });
 
 function getCookie(name) {
     let cookieValue = null;
